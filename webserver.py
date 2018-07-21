@@ -26,32 +26,32 @@ def handle_request(request_data):
     if type(state) is EventState:
         if state == EventState.EVENT_CREATED:
             setNameEvent(phone_number, body)
-            response.message('Your event has been called "{}". When would you like to have your event?'.format(body))
+            response.message('When would you like to have your event? (MM/DD/YY) HH:MM a/pm')
             return str(response)
 
         elif state == EventState.NAME_CREATED:
             setDatetimeEvent(phone_number, parser.parse(body))
-            response.message('Your event has been schedule for {}. How would you describe your event?'.format(body))
+            response.message('How would you describe your event? Remember to include the location')
             return str(response)
 
         elif state == EventState.TIME_CREATED:
             setDescriptionEvent(phone_number, body)
-            response.message("Your event has the description: {}. How many people would you like to invite?".format(body))
+            response.message("How many people would you like to invite?")
             return str(response)
         
         elif state == EventState.DESCRIPTION_CREATED:
             setCapEvent(phone_number, int(body))
-            response.message("You have invited {} people. Would you like this event to be Private, Friends of Friends, or Public?".format(body))
+            response.message("Would you like this event to be: \n1)Private \n2)Friends of Friends \n3)Public?")
             return str(response)
 
         elif state == EventState.CAPACITY_CREATED:
             setVisibilityEvent(phone_number, parseVisibility(body))
-            response.message("Visibility set. What's your name?")
+            response.message("What's your name?")
             return str(response)
 
         elif state == EventState.VISIBILITY_CREATED:
             setCreatorNameEvent(phone_number, body)
-            response.message("Hello {}, who would you like to event?".format(body))
+            response.message("Send us the phone number of or contact of someone you want to invite")
             return str(response)
         # TODO: Logic for Adding attendees
 
@@ -61,7 +61,7 @@ def handle_request(request_data):
     else:
         if body == 'START':
             if createEvent(phone_number):
-                response.message("What would you like to name your event?")
+                response.message("Welcome! Thank you for planning your event with Events Everywhere. Please provide a name for your event.")
                 return str(response)
         else:
             response.message("Please finish editing your other event first")
