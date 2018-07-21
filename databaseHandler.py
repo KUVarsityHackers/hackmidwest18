@@ -156,6 +156,42 @@ def hadUnfinishedEvent(creator):
     closeConnection(conn)
     return False
 
+def inviteAccepted(invitee):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    try:
+        c.execute('UPDATE attendees set status = ? WHERE phone = ?'
+            ,[AttendeeState.INVITE_ACCEPTED, invitee])
+        return True
+    except:
+        print("Error accepting invite")
+        return False
+
+def inviteDeclined(invitee):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    try:
+        c.execute('UPDATE attendees set status = ? WHERE phone = ?',
+            ,[AttendeeState.INVITE_DECLINED, invitee])
+        return True
+    except:
+        print("Error declining invite")
+        return False
+
+def inviteMaybe(invitee):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    try:
+        c.execute('UPDATE attendees set status = ? WHERE phone = ?',
+            ,[AttendeeState.INVITE_MAYBE, invitee])
+        return True
+    except:
+        print("Error responding with maybe")
+        return False
+
 def getState(phone):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
