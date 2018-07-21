@@ -7,16 +7,13 @@ import datetime
 import vobject
 import requests
 from dateutil import parser
-# Events table
-#  table
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
     if request.method == 'POST':
-        handle_request(request.form)
-        return Response('', 204)
+        return handle_request(request.form)
 
 def handle_request(request_data):
     body = request_data['Body']
@@ -37,7 +34,7 @@ def handle_request(request_data):
         response.message('Your event has been called "{}"'.format(body))
         return str(response)
 
-    elif addEventTime(parser.parse(body), phone_number):
+    elif setDatetimeEvent(phone_number, parser.parse(body)):
         response = MessagingResponse()
         response.message('Your event has been scudled for {}'.format(body))
         return str(response)
@@ -59,6 +56,6 @@ def only_numerics(seq):
     return seq_type().join(filter(seq_type.isdigit, seq))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
     if not os.path.isfile('database.db'):
         initializeDatabase()
+    app.run(host='0.0.0.0', port=5000)
