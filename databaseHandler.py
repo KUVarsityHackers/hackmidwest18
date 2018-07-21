@@ -33,7 +33,7 @@ def nameEvent(creator, name):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET title = {n} AND status = {ns} WHERE creator = {c} AND status = {os}'
+        c.execute('UPDATE events SET title = {n}, status = {ns} WHERE creator = {c} AND status = {os}'
             .format(n = name, c = creator, os = EventState.EVENT_CREATED, ns = EventState.NAME_CREATED))
         return True
     except:
@@ -44,7 +44,7 @@ def setDatetimeEvent(creator, datetime):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET date = {d} AND status = {ns} WHERE creator = {c} AND status = {os}'
+        c.execute('UPDATE events SET date = {d}, status = {ns} WHERE creator = {c} AND status = {os}'
             .format(d = datetime, c = creator, os = EventState.NAME_CREATED, ns = EventState.TIME_CREATED))
         return True
     except:
@@ -55,7 +55,7 @@ def setDescriptionEvent(creator, description):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET description = {d} AND status = {ns} WHERE creator = {c} AND status = {os}'
+        c.execute('UPDATE events SET description = {d}, status = {ns} WHERE creator = {c} AND status = {os}'
             .format(d = description, c = creator, os = EventState.TIME_CREATED, ns = EventState.DESCRIPTION_CREATED))
         return True
     except:
@@ -66,7 +66,7 @@ def setCapEvent(creator, cap):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET cap = {p} AND status = {ns} WHERE creator = {c} AND status = {os}'
+        c.execute('UPDATE events SET cap = {p}, status = {ns} WHERE creator = {c} AND status = {os}'
             .format(p = cap, c = creator, os = EventState.DESCRIPTION_CREATED, ns = EventState.CAPACITY_CREATED))
         return True
     except:
@@ -77,7 +77,7 @@ def setVisibilityEvent(creator, visibility):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET visibility = {a} AND status = {ns} WHERE creator = {c} AND status = {os}'
+        c.execute('UPDATE events SET visibility = {a}, status = {ns} WHERE creator = {c} AND status = {os}'
             .format(a = visibility, c = creator, os = EventState.CAPACITY_CREATED, ns = EventState.VISIBILITY_CREATED))
         return True
     except:
@@ -88,7 +88,7 @@ def setCreatorNameEvent(creator, name):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET creatorName = {n} AND status = {ns} WHERE creator = {c} AND status = {os}'
+        c.execute('UPDATE events SET creatorName = {n}, status = {ns} WHERE creator = {c} AND status = {os}'
             .format(n = name, c = creator, os = EventState.VISIBILITY_CREATED, ns = EventState.ORGANIZER_NAME_CREATED))
         return True
     except:
