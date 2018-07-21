@@ -22,7 +22,7 @@ def createEvent(creator):
 
     try:
         c.execute('INSERT INTO events (creator, status) VALUES (?, ?)'
-            ,(creator,EventState.EVENT_CREATED,))
+            ,[creator,EventState.EVENT_CREATED])
         return True
     except:
         print("Error creating event")
