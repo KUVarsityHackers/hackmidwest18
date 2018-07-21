@@ -174,7 +174,7 @@ def inviteDeclined(invitee):
 
     try:
         c.execute('UPDATE attendees set status = ? WHERE phone = ?',
-            ,[AttendeeState.INVITE_DECLINED, invitee])
+            [AttendeeState.INVITE_DECLINED, invitee])
         return True
     except:
         print("Error declining invite")
@@ -186,7 +186,7 @@ def inviteMaybe(invitee):
 
     try:
         c.execute('UPDATE attendees set status = ? WHERE phone = ?',
-            ,[AttendeeState.INVITE_MAYBE, invitee])
+            [AttendeeState.INVITE_MAYBE, invitee])
         return True
     except:
         print("Error responding with maybe")
