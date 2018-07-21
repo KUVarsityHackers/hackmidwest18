@@ -99,7 +99,7 @@ def setCreatorNameEvent(creator, name):
         c.execute('SELECT key FROM events WHERE creator = ? AND status = ?'
             ,(creator, EventState.ORGANIZER_NAME_CREATED))
         eventID = c.fetchone()[0]
-        
+
         c.exectue('INSERT INTO attendees (name, phone, eventID, status) VALUES (?, ?, ?, ?,)'
             ,(name, creator, eventID, AttendeeState.ACCEPTED))
         return True
@@ -135,3 +135,21 @@ def hadUnfinishedEvent(creator):
         if createdEvent and createdEvent != EventState.EVENT_DONE:
             return True
     return False
+
+def getState(phone):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    c.execute('SELECT status FROM events WHERE creator = ?'
+        ,(phone))
+    createdEvents = c.fetchall()
+    for createdEvent in createdEvents:
+        if createdEvent and createdEvent < EventState.EVENT_DONE:
+            return EventState(createdEvent)
+    c.execute('SELECT status FROM attendees WHERE phone = ?'
+        ,(phone))
+    attendeeEvents = c.fetchall()
+    for attendeeEvent in attendeeEvents:
+        if attendeeEvent and attendeeEvent < AttendeeState.DONE_PROVIDED:
+            return EventState(createdEvent)
+    return None
