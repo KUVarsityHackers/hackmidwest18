@@ -17,15 +17,37 @@ def createEvent(creator):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
+    if hadUnfinishedEvent(creator):
+        return False
+
     try:
-        c.execute('''INSERT INTO events (creator) VALUES ({c}, {s})'''
+        c.execute('INSERT INTO events (creator) VALUES ({c}, {s})'
             .format(c = creator, s = EventState.EVENT_CREATED))
+        return True
     except:
         print("Error creating event")
+        return False
 
-def nameEvent(name):
+def nameEvent(creator, name):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    
-    
+    try:
+        c.execute('UPDATE events SET name = {n} AND status = {ns} WHERE creator = {c} AND status = {os}'
+            .format(n = name, c = creator, os = EventState.EVENT_CREATED, ns = EventState.NAME_CREATED))
+        return True
+    except:
+        return False
+
+def hadUnfinishedEvent(creator):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    c.execute('SELECT status FROM events WHERE creator = {c}'
+        .format(c = creator))
+    createdEvents = c.fetchall
+    for createdEvent in createdEvents:
+        if createdEvent and createdEvent != EventState.EVENT_DONE:
+            return True
+    return False
+
