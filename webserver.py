@@ -56,16 +56,16 @@ def handle_request(request_data):
         # TODO: Logic for Adding attendees
 
     elif type(state) is AttendeeState:
-        print("Fuck")
+        return("Fuck")
 
     else:
         if body == 'START':
             if createEvent(phone_number):
                 response.message("What would you like to name your event?")
                 return str(response)
-            else:
-                response.message("Please finish editing your other event first")
-                return str(response)
+        else:
+            response.message("Please finish editing your other event first")
+            return str(response)
 
 def parseVisibility(body):
     if body.lower() == 'private':

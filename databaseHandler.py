@@ -34,7 +34,7 @@ def setNameEvent(creator, name):
 
     try:
         c.execute('UPDATE events SET title = ? AND status = ? WHERE creator = ? AND status = ?'
-            ,(name, EventState.NAME_CREATED, creator, EventState.EVENT_CREATED))
+            ,[name, EventState.NAME_CREATED, creator, EventState.EVENT_CREATED])
         return True
     except:
         print("Error naming event")
@@ -46,7 +46,7 @@ def setDatetimeEvent(creator, datetime):
 
     try:
         c.execute('UPDATE events SET date = ? AND status = ? WHERE creator = ? AND status = ?'
-            ,(datetime, EventState.TIME_CREATED, creator, EventState.NAME_CREATED))
+            ,[datetime, EventState.TIME_CREATED, creator, EventState.NAME_CREATED])
         return True
     except:
         print("Error setting date and time for event")
@@ -58,7 +58,7 @@ def setDescriptionEvent(creator, description):
 
     try:
         c.execute('UPDATE events SET description = ? AND status = ? WHERE creator = ? AND status = ?'
-            ,(description, EventState.DESCRIPTION_CREATED, creator, EventState.TIME_CREATED))
+            ,[description, EventState.DESCRIPTION_CREATED, creator, EventState.TIME_CREATED])
         return True
     except:
         print("Error setting description for event")
@@ -70,7 +70,7 @@ def setCapEvent(creator, cap):
 
     try:
         c.execute('UPDATE events SET cap = ? AND status = ? WHERE creator = ? AND status = ?'
-            ,(cap, EventState.CAPACITY_CREATED, creator, EventState.DESCRIPTION_CREATED))
+            ,[cap, EventState.CAPACITY_CREATED, creator, EventState.DESCRIPTION_CREATED])
         return True
     except:
         print("Error setting cap for event")
@@ -82,7 +82,7 @@ def setVisibilityEvent(creator, visibility):
 
     try:
         c.execute('UPDATE events SET visibility = ? AND status = ? WHERE creator = ? AND status = ?'
-            ,(visibility, EventState.VISIBILITY_CREATED, creator, EventState.CAPACITY_CREATED))
+            ,[visibility, EventState.VISIBILITY_CREATED, creator, EventState.CAPACITY_CREATED])
         return True
     except:
         print("Error defining visibility for event")
@@ -94,14 +94,14 @@ def setCreatorNameEvent(creator, name):
 
     try:
         c.execute('UPDATE events SET creatorName = ? AND status = ? WHERE creator = ? AND status = ?'
-            ,(name, EventState.ORGANIZER_NAME_CREATED, creator, EventState.VISIBILITY_CREATED))
+            ,[name, EventState.ORGANIZER_NAME_CREATED, creator, EventState.VISIBILITY_CREATED])
 
         c.execute('SELECT key FROM events WHERE creator = ? AND status = ?'
-            ,(creator, EventState.ORGANIZER_NAME_CREATED))
+            ,[creator, EventState.ORGANIZER_NAME_CREATED])
         eventID = c.fetchone()[0]
 
         c.exectue('INSERT INTO attendees (name, phone, eventID, status) VALUES (?, ?, ?, ?,)'
-            ,(name, creator, eventID, AttendeeState.ACCEPTED))
+            ,[name, creator, eventID, AttendeeState.ACCEPTED])
         return True
     except:
         print("Error setting the creator name for event")
@@ -114,11 +114,11 @@ def sendInvite(sender, invitee):
 
     try:
         c.execute('SELECT eventID FROM attendees WHERE phone = ?'
-            ,(sender,))
+            ,[sender])
         eventID = c.fetchone()[0]
 
         c.execute('INSERT INTO attendees (phone, eventID, status) VALUES (?, ?, ?)'
-            ,(invitee, eventID, AttendeeState.INVITE_SENT))
+            ,[invitee, eventID, AttendeeState.INVITE_SENT])
         return True
     except:
         print("Error sending invite")
@@ -129,7 +129,7 @@ def hadUnfinishedEvent(creator):
     c = conn.cursor()
 
     c.execute('SELECT status FROM events WHERE creator = ?'
-        ,(creator))
+        ,[creator])
     createdEvents = c.fetchall()
     for createdEvent in createdEvents:
         if createdEvent and createdEvent != EventState.EVENT_DONE:
@@ -141,13 +141,13 @@ def getState(phone):
     c = conn.cursor()
 
     c.execute('SELECT status FROM events WHERE creator = ?'
-        ,(phone))
+        ,[phone])
     createdEvents = c.fetchall()
     for createdEvent in createdEvents:
         if createdEvent and createdEvent < EventState.EVENT_DONE:
             return EventState(createdEvent)
     c.execute('SELECT status FROM attendees WHERE phone = ?'
-        ,(phone))
+        ,[phone])
     attendeeEvents = c.fetchall()
     for attendeeEvent in attendeeEvents:
         if attendeeEvent and attendeeEvent < AttendeeState.DONE_PROVIDED:
