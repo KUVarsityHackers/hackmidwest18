@@ -8,6 +8,11 @@ class EventState(IntEnum):
     CAPCITY_CREATED = auto()
     VISIBILITY_CREATED = auto()
     ORGANIZER_NAME_CREATED = auto()
-    ADDING_ATTENDEES = auto()
+    ATTENDEES_ADDED = auto()
     EVENT_DONE = auto()
 
+class AttendeeState(IntEnum):
+    UNKNOWN = 0
+    DECLINED = auto()
+    MAYBE = auto()
+    ACCEPTED = auto()

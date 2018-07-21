@@ -1,5 +1,5 @@
 import sqlite3
-from models import EventState
+from models import EventState, AttendeeState
 
 fileName = 'database.db'
 
@@ -10,7 +10,7 @@ def initializeDatabase():
     c.execute('''CREATE TABLE events
     (key INTEGER PRIMARY KEY, title TEXT, date TEXT, cap INTEGER, visibility INTEGER, creator TEXT, creatorName TEXT, status INTEGER, details TEXT)''')
 
-    c.execute('''CREATE TABLE attendee
+    c.execute('''CREATE TABLE attendees
     (key INTEGER PRIMARY KEY, name TEXT, phone TEXT, eventID INTEGER, status TEXT)''')
 
 def createEvent(creator):
@@ -21,22 +21,23 @@ def createEvent(creator):
         return False
 
     try:
-        c.execute('INSERT INTO events (creator, status) VALUES ({c}, {s})'
-            .format(c = creator, s = EventState.EVENT_CREATED))
+        c.execute('INSERT INTO events (creator, status) VALUES (?, ?)'
+            ,(creator,EventState.EVENT_CREATED,))
         return True
     except:
         print("Error creating event")
         return False
 
-def nameEvent(creator, name):
+def setNameEvent(creator, name):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET title = {n} AND status = {ns} WHERE creator = {c} AND status = {os}'
-            .format(n = name, c = creator, os = EventState.EVENT_CREATED, ns = EventState.NAME_CREATED))
+        c.execute('UPDATE events SET title = ? AND status = ? WHERE creator = ? AND status = ?'
+            ,(name, EventState.NAME_CREATED, creator, EventState.EVENT_CREATED))
         return True
     except:
+        print("Error naming event")
         return False
 
 def setDatetimeEvent(creator, datetime):
@@ -44,10 +45,11 @@ def setDatetimeEvent(creator, datetime):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET date = {d} AND status = {ns} WHERE creator = {c} AND status = {os}'
-            .format(d = datetime, c = creator, os = EventState.NAME_CREATED, ns = EventState.TIME_CREATED))
+        c.execute('UPDATE events SET date = ? AND status = ? WHERE creator = ? AND status = ?'
+            ,(datetime, EventState.TIME_CREATED, creator, EventState.NAME_CREATED))
         return True
     except:
+        print("Error setting date and time for event")
         return False
 
 def setDescriptionEvent(creator, description):
@@ -55,10 +57,11 @@ def setDescriptionEvent(creator, description):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET description = {d} AND status = {ns} WHERE creator = {c} AND status = {os}'
-            .format(d = description, c = creator, os = EventState.TIME_CREATED, ns = EventState.DESCRIPTION_CREATED))
+        c.execute('UPDATE events SET description = ? AND status = ? WHERE creator = ? AND status = ?'
+            ,(description, EventState.DESCRIPTION_CREATED, creator, EventState.TIME_CREATED))
         return True
     except:
+        print("Error setting description for event")
         return False
 
 def setCapEvent(creator, cap):
@@ -66,10 +69,11 @@ def setCapEvent(creator, cap):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET cap = {p} AND status = {ns} WHERE creator = {c} AND status = {os}'
-            .format(p = cap, c = creator, os = EventState.DESCRIPTION_CREATED, ns = EventState.CAPACITY_CREATED))
+        c.execute('UPDATE events SET cap = ? AND status = ? WHERE creator = ? AND status = ?'
+            ,(cap, EventState.CAPACITY_CREATED, creator, EventState.DESCRIPTION_CREATED))
         return True
     except:
+        print("Error setting cap for event")
         return False
 
 def setVisibilityEvent(creator, visibility):
@@ -77,10 +81,11 @@ def setVisibilityEvent(creator, visibility):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET visibility = {a} AND status = {ns} WHERE creator = {c} AND status = {os}'
-            .format(a = visibility, c = creator, os = EventState.CAPACITY_CREATED, ns = EventState.VISIBILITY_CREATED))
+        c.execute('UPDATE events SET visibility = ? AND status = ? WHERE creator = ? AND status = ?'
+            ,(visibility, EventState.VISIBILITY_CREATED, creator, EventState.CAPACITY_CREATED))
         return True
     except:
+        print("Error defining visibility for event")
         return False
 
 def setCreatorNameEvent(creator, name):
@@ -88,18 +93,43 @@ def setCreatorNameEvent(creator, name):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET creatorName = {n} AND status = {ns} WHERE creator = {c} AND status = {os}'
-            .format(n = name, c = creator, os = EventState.VISIBILITY_CREATED, ns = EventState.ORGANIZER_NAME_CREATED))
+        c.execute('UPDATE events SET creatorName = ? AND status = ? WHERE creator = ? AND status = ?'
+            ,(name, EventState.ORGANIZER_NAME_CREATED, creator, EventState.VISIBILITY_CREATED))
+
+        c.execute('SELECT key FROM events WHERE creator = ? AND status = ?'
+            ,(creator, EventState.ORGANIZER_NAME_CREATED))
+        eventID = c.fetchone()[0]
+        
+        c.exectue('INSERT INTO attendees (name, phone, eventID, status) VALUES (?, ?, ?, ?,)'
+            ,(name, creator, eventID, AttendeeState.ACCEPTED))
         return True
     except:
+        print("Error setting the creator name for event")
+        return False
+
+def sendInvite(sender, invitee):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+    eventID = 0
+
+    try:
+        c.execute('SELECT eventID FROM attendees WHERE phone = ?'
+            ,(sender,))
+        eventID = c.fetchone()[0]
+
+        c.execute('INSERT INTO attendees (phone, eventID, status) VALUES (?, ?, ?)'
+            ,(invitee, eventID, AttendeeState.UNKNOWN))
+        return True
+    except:
+        print("Error sending invite")
         return False
 
 def hadUnfinishedEvent(creator):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT status FROM events WHERE creator = {c}'
-        .format(c = creator))
+    c.execute('SELECT status FROM events WHERE creator = ?'
+        ,(creator))
     createdEvents = c.fetchall()
     for createdEvent in createdEvents:
         if createdEvent and createdEvent != EventState.EVENT_DONE:
