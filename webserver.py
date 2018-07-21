@@ -59,6 +59,7 @@ def only_numerics(seq):
     return seq_type().join(filter(seq_type.isdigit, seq))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    os.remove('database.db')
     if not os.path.isfile('database.db'):
         initializeDatabase()
+    app.run(host='0.0.0.0', port=80)
