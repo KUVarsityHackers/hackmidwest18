@@ -23,7 +23,7 @@ def handle_request(request_data):
 
     state = getState(phone_number)
 
-    if state is EventState:
+    if type(state) is EventState:
         if state == EventState.EVENT_CREATED:
             nameEvent(phone_number, body)
             response.message('Your event has been called "{}". When would you like to have your event?'.format(body))
@@ -55,7 +55,7 @@ def handle_request(request_data):
             return str(response)
         # TODO: Logic for Adding attendees
 
-    elif state is AttendeeState:
+    elif type(state) is AttendeeState:
         print("Fuck")
 
     else:
