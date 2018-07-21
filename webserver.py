@@ -10,9 +10,12 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 def main():
     if request.method == 'POST':
-        print(request.form)
-        return Response('Success', 200)
+        handle_response(request.form)
+        return Response('', 204)
 
+def handle_requst(request_data):
+    for key, value in request_data.items():
+        print(key, value)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=80)
