@@ -5,7 +5,7 @@ class EventState(IntEnum):
     NAME_CREATED = auto()
     TIME_CREATED = auto()
     DESCRIPTION_CREATED = auto()
-    CAPCITY_CREATED = auto()
+    CAPACITY_CREATED = auto()
     VISIBILITY_CREATED = auto()
     ORGANIZER_NAME_CREATED = auto()
     ATTENDEES_ADDED = auto()

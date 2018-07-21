@@ -25,7 +25,7 @@ def handle_request(request_data):
 
     if type(state) is EventState:
         if state == EventState.EVENT_CREATED:
-            nameEvent(phone_number, body)
+            setNameEvent(phone_number, body)
             response.message('Your event has been called "{}". When would you like to have your event?'.format(body))
             return str(response)
 
@@ -40,11 +40,11 @@ def handle_request(request_data):
             return str(response)
         
         elif state == EventState.DESCRIPTION_CREATED:
-            setCapEvent(phone_number, body)
+            setCapEvent(phone_number, int(body))
             response.message("You have invited {} people. Would you like this event to be Private, Friends of Friends, or Public?".format(body))
             return str(response)
 
-        elif state == EventState.CAPCITY_CREATED:
+        elif state == EventState.CAPACITY_CREATED:
             setVisibilityEvent(phone_number, parseVisibility(body))
             response.message("Visibility set. What's your name?")
             return str(response)
