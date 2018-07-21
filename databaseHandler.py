@@ -13,6 +13,8 @@ def initializeDatabase():
     c.execute('''CREATE TABLE attendees
     (key INTEGER PRIMARY KEY, name TEXT, phone TEXT, eventID INTEGER, status TEXT)''')
 
+    conn.close()
+
 def createEvent(creator):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -27,6 +29,8 @@ def createEvent(creator):
     except:
         print("Error creating event")
         return False
+    
+    conn.close()
 
 def setNameEvent(creator, name):
     conn = sqlite3.connect(fileName)
@@ -40,6 +44,8 @@ def setNameEvent(creator, name):
         print("Error naming event")
         return False
 
+    conn.close()
+
 def setDatetimeEvent(creator, datetime):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -51,6 +57,8 @@ def setDatetimeEvent(creator, datetime):
     except:
         print("Error setting date and time for event")
         return False
+
+    conn.close()
 
 def setDescriptionEvent(creator, description):
     conn = sqlite3.connect(fileName)
@@ -64,6 +72,8 @@ def setDescriptionEvent(creator, description):
         print("Error setting description for event")
         return False
 
+    conn.close()
+
 def setCapEvent(creator, cap):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -76,6 +86,8 @@ def setCapEvent(creator, cap):
         print("Error setting cap for event")
         return False
 
+    conn.close()
+
 def setVisibilityEvent(creator, visibility):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -87,6 +99,8 @@ def setVisibilityEvent(creator, visibility):
     except:
         print("Error defining visibility for event")
         return False
+
+    conn.close()
 
 def setCreatorNameEvent(creator, name):
     conn = sqlite3.connect(fileName)
@@ -107,6 +121,8 @@ def setCreatorNameEvent(creator, name):
         print("Error setting the creator name for event")
         return False
 
+    conn.close()
+
 def sendInvite(sender, invitee):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -124,6 +140,8 @@ def sendInvite(sender, invitee):
         print("Error sending invite")
         return False
 
+    conn.close()
+
 def hadUnfinishedEvent(creator):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -135,6 +153,8 @@ def hadUnfinishedEvent(creator):
         if createdEvent and createdEvent != EventState.EVENT_DONE:
             return True
     return False
+
+    conn.close()
 
 def getState(phone):
     conn = sqlite3.connect(fileName)
@@ -153,3 +173,5 @@ def getState(phone):
         if attendeeEvent and attendeeEvent < AttendeeState.DONE_PROVIDED:
             return EventState(createdEvent)
     return None
+
+    conn.close()
