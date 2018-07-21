@@ -3,9 +3,10 @@ from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 from databaseHandler import *
 import os.path
-import datatime
+import datetime
 import vobject
 import requests
+from dateutil import parser
 # Events table
 #  table
 
@@ -36,7 +37,12 @@ def handle_request(request_data):
         response.message('Your event has been called "{}"'.format(body))
         return str(response)
 
-        
+    elif addEventTime(parser.parse(body), phone_number):
+        response = MessagingResponse()
+        response.message('Your event has been scudled for {}'.format(body))
+        return str(response)
+
+
 def handle_vcf_url(url):
     r = requests.get(url)
     vcard = vobject.readOne(r.text)
@@ -53,6 +59,6 @@ def only_numerics(seq):
     return seq_type().join(filter(seq_type.isdigit, seq))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=5000)
     if not os.path.isfile('database.db'):
         initializeDatabase()
