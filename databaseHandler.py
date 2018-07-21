@@ -118,7 +118,7 @@ def sendInvite(sender, invitee):
         eventID = c.fetchone()[0]
 
         c.execute('INSERT INTO attendees (phone, eventID, status) VALUES (?, ?, ?)'
-            ,(invitee, eventID, AttendeeState.UNKNOWN))
+            ,(invitee, eventID, AttendeeState.INVITE_SENT))
         return True
     except:
         print("Error sending invite")
