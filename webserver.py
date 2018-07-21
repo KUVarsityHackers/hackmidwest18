@@ -7,6 +7,7 @@ import datetime
 import vobject
 import requests
 from dateutil import parser
+from models import EventState, AttendeeState
 
 app = Flask(__name__)
 
@@ -16,41 +17,55 @@ def main():
         return handle_request(request.form)
 
 def handle_request(request_data):
+    response = MessagingResponse()
     body = request_data['Body']
     phone_number = request_data['From']
-    response = MessagingResponse()
 
-    if body == 'START':
-        if createEvent(phone_number):
-            response.message("What would you like to name your event?")
+    state = getState(phone_number)
+
+    if state is EventState:
+        if state == EventState.EVENT_CREATED:
+            nameEvent(phone_number, body)
+            response.message('Your event has been called "{}". When would you like to have your event?'.format(body))
             return str(response)
-        else:
-            response.message("Please finish editing your other event first")
+
+        elif state == EventState.NAME_CREATED:
+            setDatetimeEvent(phone_number, parser.parse(body))
+            response.message('Your event has been schedule for {}. How would you describe your event?'.format(body))
             return str(response)
 
-    elif nameEvent(phone_number, body):
-        response.message('Your event has been called "{}". When would you like to have your event?'.format(body))
-        return str(response)
+        elif state == EventState.TIME_CREATED:
+            setDescriptionEvent(phone_number, body)
+            response.message("Your event has the description: {}. How many people would you like to invite?".format(body))
+            return str(response)
+        
+        elif state == EventState.DESCRIPTION_CREATED:
+            setCapEvent(phone_number, body)
+            response.message("You have invited {} people. Would you like this event to be Private, Friends of Friends, or Public?".format(body))
+            return str(response)
 
-    elif setDatetimeEvent(phone_number, parser.parse(body)):
-        response.message('Your event has been schedule for {}. How would you describe your event?'.format(body))
-        return str(response)
+        elif state == EventState.CAPCITY_CREATED:
+            setVisibilityEvent(phone_number, parseVisibility(body))
+            response.message("Visibility set. What's your name?")
+            return str(response)
 
-    elif setDescriptionEvent(phone_number, body):
-        response.message("Your event has the description: {}. How many people would you like to invite?".format(body))
-        return str(response)
-    
-    elif setCapEvent(phone_number, body):
-        response.message("You have invited {} people. Would you like this event to be Private, Friends of Friends, or Public?".format(body))
-        return str(response)
+        elif state == EventState.VISIBILITY_CREATED:
+            setCreatorNameEvent(phone_number, body)
+            response.message("Hello {}, who would you like to event?".format(body))
+            return str(response)
+        # TODO: Logic for Adding attendees
 
-    elif setVisibilityEvent(phone_number, parseVisibility(body)):
-        response.message("Visibility set. What's your name?")
-        return str(response)
+    elif state is AttendeeState:
+        print("Fuck")
 
-    elif setCreatorNameEvent(phone_number, body):
-        response.message("Hello {}, who would you like to event?".format(body))
-        return str(response)
+    else:
+        if body == 'START':
+            if createEvent(phone_number):
+                response.message("What would you like to name your event?")
+                return str(response)
+            else:
+                response.message("Please finish editing your other event first")
+                return str(response)
 
 def parseVisibility(body):
     if body.lower() == 'private':
