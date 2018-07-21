@@ -3,7 +3,7 @@ from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 from databaseHandler import *
 import os.path
-import datatime
+import datetime
 import vobject
 import requests
 # Events table
