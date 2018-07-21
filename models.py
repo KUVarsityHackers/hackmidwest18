@@ -11,3 +11,11 @@ class EventState(IntEnum):
     ADDING_ATTENDEES = auto()
     EVENT_DONE = auto()
 
+class AttendeeState(IntEnum):
+	INVITE_SENT = 0
+	INVITE_ACCEPTED = auto()
+	INVITE_DECLINED = auto()
+	INVITE_MAYBE = auto()
+	ATTENDEE_NAMED = auto()
+	ATTENDEE_NUMBERED = auto()
+	DONE_PROVIDED = auto()
