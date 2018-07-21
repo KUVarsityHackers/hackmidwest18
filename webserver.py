@@ -3,9 +3,7 @@ from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 from databaseHandler import *
 import os.path
-
-# Events table
-#  table
+import datatime
 
 app = Flask(__name__)
 
@@ -16,8 +14,15 @@ def main():
         return Response('', 204)
 
 def handle_request(request_data):
-    for key, value in request_data.items():
-        print(key, value)
+    body = request_data['Body']
+    phone_number = request_data['From']
+
+    if body == 'START':
+        createEvent(phone_number)
+        response = MessagingResponse()
+        response.message("What would you like to name your event?")
+        return str(resp)
+    else if 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
