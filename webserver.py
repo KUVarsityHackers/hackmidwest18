@@ -18,11 +18,18 @@ def handle_request(request_data):
     phone_number = request_data['From']
 
     if body == 'START':
-        createEvent(phone_number)
+        if createEvent(phone_number):
+            response = MessagingResponse()
+            response.message("What would you like to name your event?")
+            return str(response)
+        else:
+            response = MessagingResponse()
+            response.message("Please finish editing your other event first")
+            return str(response)
+
+    elif nameEvent(body, phone_number):
         response = MessagingResponse()
-        response.message("What would you like to name your event?")
-        return str(resp)
-    else if 
+        response.message('Your event has been called "{}"'.format(body))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
