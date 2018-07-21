@@ -45,7 +45,7 @@ def hadUnfinishedEvent(creator):
 
     c.execute('SELECT status FROM events WHERE creator = {c}'
         .format(c = creator))
-    createdEvents = c.fetchall
+    createdEvents = c.fetchall()
     for createdEvent in createdEvents:
         if createdEvent and createdEvent != EventState.EVENT_DONE:
             return True
