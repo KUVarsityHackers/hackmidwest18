@@ -33,7 +33,7 @@ def nameEvent(creator, name):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET name = {n} AND status = {ns} WHERE creator = {c} AND status = {os}'
+        c.execute('UPDATE events WHERE (creator, status) = ({c}, {os}) SET name = {n} AND status = {ns}'
             .format(n = name, c = creator, os = EventState.EVENT_CREATED, ns = EventState.NAME_CREATED))
         return True
     except:
