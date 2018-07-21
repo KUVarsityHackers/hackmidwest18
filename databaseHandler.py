@@ -21,7 +21,7 @@ def createEvent(creator):
         return False
 
     try:
-        c.execute('INSERT INTO events (creator) VALUES ({c}, {s})'
+        c.execute('INSERT INTO events (creator, status) VALUES ({c}, {s})'
             .format(c = creator, s = EventState.EVENT_CREATED))
         return True
     except:
@@ -100,7 +100,7 @@ def hadUnfinishedEvent(creator):
 
     c.execute('SELECT status FROM events WHERE creator = {c}'
         .format(c = creator))
-    createdEvents = c.fetchall
+    createdEvents = c.fetchall()
     for createdEvent in createdEvents:
         if createdEvent and createdEvent != EventState.EVENT_DONE:
             return True
