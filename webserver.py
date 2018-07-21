@@ -1,4 +1,5 @@
 from flask import Flask, request, Response
+from twilio.rest import Client
 import sqlite3
 
 # Events table
