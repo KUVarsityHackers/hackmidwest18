@@ -142,6 +142,44 @@ def sendInvite(sender, invitee):
         closeConnection(conn)
         return False
 
+def getPersonName(phone_number):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    c.execute('SELECT creatorName FROM events WHERE creator = ?'
+        ,[phone])
+    creatorNames = c.fetchone()
+    if creatorNames is not None:
+        for creatorName in creatorNames:
+            if len(creatorName) > 0:
+                closeConnection(conn)
+                return str(creatorName)
+    c.execute('SELECT name FROM attendees WHERE phone = ?'
+            ,[phone])
+    attendeeNames = c.fetchall()
+
+    if attendeeNames is not None:
+        for attendeeName in attendeeNames:
+            if len(attendeeName) > 0:
+                closeConnection(conn)
+                return str(attendeeName)
+    return None
+
+def getOpenEventName(creator_phone_number):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    c.execute('SELECT eventName FROM events WHERE creator = ? AND NOT status = ?'
+        ,[creator, EventState.DONE_PROVIDED])
+    createdEventName = c.fetchone()
+    closeConnection(conn)
+    if not (createdEventName is None):
+        return str(createdEventName)
+    return None
+
+
+    return False
+
 def hadUnfinishedEvent(creator):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -164,7 +202,6 @@ def getState(phone):
         ,[phone])
     createdEvents = c.fetchone()
     if createdEvents is not None:
-
         for createdEvent in createdEvents:
             if int(createdEvent) < int(EventState.EVENT_DONE):
                 closeConnection(conn)
@@ -172,7 +209,7 @@ def getState(phone):
     c.execute('SELECT status FROM attendees WHERE phone = ?'
             ,[phone])
     attendeeEvents = c.fetchall()
-    
+
     if attendeeEvents is not None:
         for attendeeEvent in attendeeEvents:
             if int(attendeeEvent[0]) < int(AttendeeState.DONE_PROVIDED):
@@ -184,3 +221,17 @@ def getState(phone):
 def closeConnection(conn):
     conn.commit()
     conn.close()
+
+def setDone(phone_number):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    try:
+        c.execute('UPDATE events SET status = ? WHERE creator = ? AND status = ?'
+            ,[EventState.EVENT_DONE, creator, EventState.ATTENDEES_ADDED])
+        closeConnection(conn)
+        return True
+    except:
+        print("Error setting done for event")
+        closeConnection(conn)
+        return False
