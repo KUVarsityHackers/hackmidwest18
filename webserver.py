@@ -28,7 +28,7 @@ def handle_request(request_data):
     if type(state) is EventState:
         if state == EventState.EVENT_CREATED:
             setNameEvent(phone_number, body)
-            response.message('When would you like to have your event? (MM/DD/YY) HH:MM a/pm')
+            response.message('When would you like to have your event? (MM/DD/YY HH:MM a/pm)')
             return str(response)
 
         elif state == EventState.NAME_CREATED:
@@ -43,7 +43,7 @@ def handle_request(request_data):
 
         elif state == EventState.DESCRIPTION_CREATED:
             setCapEvent(phone_number, int(body))
-            response.message("Would you like this event to be: \n1)Private \n2)Friends of Friends \n3)Public?")
+            response.message("Would you like this event to be: \n1)Private \n2)Friends of Friends \n3)Public")
             return str(response)
 
         elif state == EventState.CAPACITY_CREATED:
