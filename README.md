@@ -1,5 +1,7 @@
 # Events Anywhere
 
+[![Build Status](https://travis-ci.org/KUVarsityHackers/hackmidwest18.svg?branch=master)](https://travis-ci.org/KUVarsityHackers/hackmidwest18)
+
 *Events Anywhere* is a web application that allows people to coordinate and plan events entirely over SMS, enabling people with no or limited Internet access to connect using their mobile phones.
 
 
