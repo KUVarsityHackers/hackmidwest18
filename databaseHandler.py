@@ -399,13 +399,16 @@ def getAttendees(key):
     closeConnection(conn)
     return Attendees
     
-
-def remind_jobs():
+def getKeyCreator(creator)
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT(key,date) FROM events')
-    return c.fetchall()
+    c.execute('SELECT key FROM events WHERE status NOT = ? AND creatorName = ?', [EventState.EVENT_DONE, creator]) 
+
+    keys = c.fetchall()
+    closeConnection(conn)
+    return keys
+
 
 def isFull(key):
     conn = sqlite3.connect(fileName)
