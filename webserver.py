@@ -15,6 +15,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
+    expired()
     if request.method == 'POST':
         return handle_request(request.form)
 
@@ -172,11 +173,17 @@ def only_numerics(seq):
     seq_type= type(seq)
     return seq_type().join(filter(seq_type.isdigit, seq))
 
+def expired():
+    keytimes = getAlltimes()
+    print("KeyTimes:")
+    for key, time in keytimes:
+       print(key)
+       print(time)
+ 
 if __name__ == '__main__':
     if not os.path.isfile('database.db'):
         initializeDatabase()
     app.run(host='0.0.0.0', port=5000)
-
 
 
 
