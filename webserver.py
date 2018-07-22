@@ -100,7 +100,7 @@ def handle_request(request_data):
                 return str(response)
         elif state == AttendeeState.INVITE_ACCEPTED:
             setAttendeeName(phone_number, body)
-            if canAdd(AttendeeState.ATTENDEE_NAMED, phone_number):
+            if canAdd(phone_number,AttendeeState.ATTENDEE_NAMED):
                 response.message("If you'd like please send us the name or contact of someone else you'd like to invite, then type DONE")
             else:
                 setAttendeeDone(phone_number)
