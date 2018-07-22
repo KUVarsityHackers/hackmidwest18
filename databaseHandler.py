@@ -16,13 +16,25 @@ def initializeDatabase():
     closeConnection(conn)
 
 def isOwner(phone,eventID):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
     c.execute('SELECT isOwner FROM attendees WHERE eventID = ? AND phone = ?'
         ,[eventID,phone])
+
+    closeConnection(conn)
+
     return c.fetchone()[0]
 def canAdd(phone,state):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
     c.execute('SELECT canAdd FROM attendees WHERE state = ? AND phone = ?'
         ,[int(state),phone])
     print(c.fetchone())
+
+    closeConnection(conn)
+
     return c.fetchone()[0]
 
 def createEvent(creator):
