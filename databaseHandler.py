@@ -364,12 +364,14 @@ def setAttendeeDone(phone_number):
         closeConnection(conn)
         return False
 
-def remind_jobs()
+def getAlltimes():
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT(key,date) FROM events')
-    return c.fetchall()
+    c.execute('SELECT key, date FROM events')
+    keytimes = c.fetchall()
+    closeConnection(conn)
+    return keytimes
         
 
 
