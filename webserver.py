@@ -195,9 +195,6 @@ def remind_attendees():
             for name, phone in attendees:
                 sendSMS(phone, "Your event starts in under two hours")
 
-def get_attendance(sender):
-    
-
 if __name__ == '__main__':
     if not os.path.isfile('database.db'):
         initializeDatabase()
