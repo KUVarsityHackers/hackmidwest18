@@ -17,5 +17,4 @@ class AttendeeState(IntEnum):
     INVITE_DECLINED = auto()
     INVITE_MAYBE = auto()
     ATTENDEE_NAMED = auto()
-    ATTENDEE_NUMBERED = auto()
     DONE_PROVIDED = auto()
