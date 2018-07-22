@@ -11,7 +11,7 @@ def initializeDatabase():
     (key INTEGER PRIMARY KEY, title TEXT, date TEXT, cap INTEGER, visibility INTEGER, creator TEXT, creatorName TEXT, status INTEGER, details TEXT)''')
 
     c.execute('''CREATE TABLE attendees
-    (key INTEGER PRIMARY KEY, name TEXT, phone TEXT, eventID INTEGER, status INTEGER, isOwner BOOLEAN, canAdd)''')
+    (key INTEGER PRIMARY KEY, name TEXT, phone TEXT, eventID INTEGER, status INTEGER, isOwner BOOLEAN, canAdd BOOLEAN)''')
 
     closeConnection(conn)
 
