@@ -190,9 +190,9 @@ def remind_attendees():
     minus2fromnow = datetime.datetime.now().addHours(-2)
     keytimes = getAlltimes()
     for key, time, creator in keytimes:
-        if(minus2fromnow < str(time) and str(time) < now)
+        if(minus2fromnow < str(time) and str(time) < now):
             attendees = getAttendees(key)
-            for name, phone in attendees
+            for name, phone in attendees:
                 sendSMS(phone, "Your event starts in under two hours")
 
 if __name__ == '__main__':
