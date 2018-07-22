@@ -229,10 +229,13 @@ def remind_attendees():
     plus2fromnow = datetime.datetime.now() + datetime.timedelta(hours=2)
     keytimes = getAlltimes()
     for key, time, creator in keytimes:
-        if(plus2fromnow > parser.parse(time) and parser.parse(time) < now):
-            attendees = getAttendees(key)
-            for name, phone in attendees:
-                sendSMS(phone, "Your event starts in under two hours")
+        try:
+            if(plus2fromnow > parser.parse(time) and parser.parse(time) < now):
+                attendees = getAttendees(key)
+                for name, phone in attendees:
+                    sendSMS(phone, "Your event starts in under two hours")
+        except:
+            pass
 
 def get_attendance(sender):
     print(sender)
