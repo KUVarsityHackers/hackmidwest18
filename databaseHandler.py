@@ -176,7 +176,15 @@ def sendInvite(sender, invitee):
         print("Error sending invite")
         closeConnection(conn)
         return False
+def getKeyAttendee(phone_number):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
 
+    c.execute('SELECT eventID FROM attendees WHERE phone = ? AND (NOT status = ? OR NOT status = ? OR NOT status = ?)'
+        ,[phone_number, AttendeeState.DONE_PROVIDED, AttendeeState.INVITE_DECLINED, AttendeeState.INVITE_MAYBE])
+    eventID = c.fetchone()
+    closeConnection(conn)
+    return eventID
 def getPersonName(phone_number):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -200,12 +208,12 @@ def getPersonName(phone_number):
                 return str(attendeeName)
     return None
 
-def getEventDescription(phone_number):
+def getEventDescription(key):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT details FROM events WHERE creator = ? AND NOT status = ?'
-        ,[phone_number, EventState.EVENT_DONE])
+    c.execute('SELECT details FROM events WHERE key = ?'
+        ,[key])
     creatorNames = c.fetchone()
     if creatorNames is not None:
         for creatorName in creatorNames:
@@ -214,12 +222,12 @@ def getEventDescription(phone_number):
                 return str(creatorName)
     return None
 
-def getEventTime(phone_number):
+def getEventTime(key):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT date FROM events WHERE creator = ? AND NOT status = ?'
-        ,[phone_number, EventState.EVENT_DONE])
+    c.execute('SELECT date FROM events WHERE key = ?'
+        ,[key])
     creatorNames = c.fetchone()
     if creatorNames is not None:
         for creatorName in creatorNames:
@@ -228,12 +236,12 @@ def getEventTime(phone_number):
                 return str(creatorName)
     return None
 
-def getOpenEventName(creator_phone_number):
+def getOpenEventName(key):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT title FROM events WHERE creator = ? AND NOT status = ?'
-        ,[creator_phone_number, EventState.EVENT_DONE])
+    c.execute('SELECT title FROM events WHERE key = ?'
+        ,[key])
     createdEventName = c.fetchone()
     closeConnection(conn)
     if not (createdEventName is None):
@@ -364,6 +372,7 @@ def setAttendeeDone(phone_number):
         closeConnection(conn)
         return False
 
+<<<<<<< HEAD
 def getAlltimes():
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -380,3 +389,11 @@ def getAlltimes():
 
 
 
+=======
+def remind_jobs():
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    c.execute('SELECT(key,date) FROM events')
+    return c.fetchall()
+>>>>>>> 3c5424d213b467049fcaa738a49ad4f07ba39124

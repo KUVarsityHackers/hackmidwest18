@@ -15,7 +15,6 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
-    expired()
     if request.method == 'POST':
         return handle_request(request.form)
 
@@ -121,6 +120,8 @@ def handle_request(request_data):
                 if(len(body) == 10):
                     contacts_list.append("+1" + str(body))
                 elif(len(body) == 11):
+                    contacts_list.append("+" + str(body))
+                for invitee in contacts_list:
                     sendInvite(phone_number, invitee)
                 sendInviteSMS(phone_number, contacts_list)
                 response.message("Send us the name or contact of someone else you'd like to invite, or type DONE")
@@ -141,10 +142,11 @@ def handle_request(request_data):
     return(str(response))
 
 def sendInviteSMS(sender, inviteesNumber):
-    senderName = getPersonName(sender)
-    eventName = getOpenEventName(sender)
-    eventDescription = getEventDescription(sender)
-    eventTime = getEventTime(sender)
+    key = getKeyAttendee(inviteesNumber[0])
+    senderName = getPersonName(key)
+    eventName = getOpenEventName(key)
+    eventDescription = getEventDescription(key)
+    eventTime = getEventTime(key)
     message = '''Message from Events Everywhere:\n%s has invited you to %s: %s at %s\n Can you come?\nReply Yes, No, Maybe''' % (senderName, eventName, eventDescription, eventTime)
 
     for invitee in inviteesNumber:
@@ -183,6 +185,7 @@ def expired():
 if __name__ == '__main__':
     if not os.path.isfile('database.db'):
         initializeDatabase()
+<<<<<<< HEAD
     app.run(host='0.0.0.0', port=5000)
 
 
@@ -193,3 +196,6 @@ if __name__ == '__main__':
 
 
     
+=======
+    app.run(host='0.0.0.0', port=80)
+>>>>>>> 3c5424d213b467049fcaa738a49ad4f07ba39124
