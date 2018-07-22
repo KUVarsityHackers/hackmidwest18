@@ -10,7 +10,9 @@ from dateutil import parser
 from models import EventState, AttendeeState
 from twilio.rest import Client
 from auth_token import account_sid, auth_token
+from apscheduler.schedulers.background import BackgroundScheduler
 
+scheduler = BackgroundScheduler()
 app = Flask(__name__)
 
 
@@ -65,7 +67,7 @@ def handle_request(request_data):
             if state == EventState.ATTENDEES_ADDED:
                 if body == "DONE":
                     event_name = getOpenEventName(key)
-                    setDone(phone_number)
+                    setDoneButListening(phone_number)
                     response.message(
                         "Thank you for planning {} with Events Everywhere. We hope your event goes well.".format(event_name))
                     return str(response)
@@ -88,6 +90,10 @@ def handle_request(request_data):
             response.message(
                 "Send us the name or contact of someone else you'd like to invite, or type DONE")
             return str(response)
+        elif state == EventState.EVENT_DONE_BUT_LISTENING:
+            if body.upper() == 'PEOPLE':
+                response.message(get_attendance(phone_number))
+                return(str(response))
 
     elif type(state) is AttendeeState:
         if state == AttendeeState.INVITE_SENT or state == AttendeeState.INVITE_MAYBE:
@@ -222,8 +228,23 @@ def remind_attendees():
             for name, phone in attendees:
                 sendSMS(phone, "Your event starts in under two hours")
 
+def get_attendance(sender):
+    print(sender)
+    key = getKeyAttendee(sender)
+    print(key)
+    attendees = getAttendees(key)
+    print(attendees)
+    myString = ""
+    for name, phone in attendees:
+        myString = myString + '\n' + str(name) 
+    return(myString)  
+    
 
 if __name__ == '__main__':
     if not os.path.isfile('database.db'):
         initializeDatabase()
     app.run(host='0.0.0.0', port=5000)
+
+scheduler.add_job(expired, 'interval', hours = 24)
+scheduler.add_job(remind_attendees, 'interval', hours = 1)
+scheduler.start()
