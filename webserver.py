@@ -29,6 +29,7 @@ def handle_request(request_data):
         if state == EventState.EVENT_CREATED:
             setNameEvent(phone_number, body)
             response.message('When would you like to have your event?\n(MM/DD/YY HH:MM (a/p)m)')
+            response.price = -1
             return str(response)
 
         elif state == EventState.NAME_CREATED:
@@ -157,8 +158,6 @@ def sendSMS(number, message):
         to=number,
         from_="+12028038368",
         body=message)
-
-    print(message.sid)
 
 def handle_vcf_url(url):
     r = requests.get(url)
