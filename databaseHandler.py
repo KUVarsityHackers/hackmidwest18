@@ -21,10 +21,10 @@ def isOwner(phone,eventID):
 
     c.execute('SELECT isOwner FROM attendees WHERE eventID = ? AND phone = ?'
         ,[eventID,phone])
-
+    isOwner = c.fetchone()[0]
     closeConnection(conn)
 
-    return c.fetchone()[0]
+    return isOwner
 def canAdd(phone,state):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -32,10 +32,10 @@ def canAdd(phone,state):
     c.execute('SELECT canAdd FROM attendees WHERE status = ? AND phone = ?'
         ,[int(state),phone])
     print(c.fetchone())
-
+    canAdd = c.fetchone()[0]
     closeConnection(conn)
 
-    return c.fetchone()[0]
+    return canAdd
 
 def createEvent(creator):
     conn = sqlite3.connect(fileName)
