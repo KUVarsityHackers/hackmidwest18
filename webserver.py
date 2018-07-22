@@ -76,26 +76,27 @@ def handle_request(request_data):
                 return str(response)
             for invitee in contacts_list:
                 sendInvite(phone_number, invitee)
+            sendInviteSMS(phone_number, contacts_list)
             response.message("Send us the name or contact of someone else you'd like to invite, or type DONE")
             return str(response)
 
 
     elif type(state) is AttendeeState:
         if state == AttendeeState.INVITE_SENT or state == AttendeeState.INVITE_MAYBE:
-            if body.lower() == 'accept':
+            if body.lower() == 'yes':
                 inviteAccepted(phone_number)
                 response.message("Thank you for accepting. What's your name?")
                 return str(response)
-            elif body.lower() == 'decline':
+            elif body.lower() == 'no':
                 inviteDeclined(phone_number)
                 response.message("Sorry that you can't make it. Thank you for using Events Everywhere")
                 return str(response)
             elif body.lower() == 'maybe':
                 inviteMaybe(phone_number)
-                response.message("Please response accept or decline when you know if you'll be able to make it")
+                response.message("Please respond yes or no when you know if you'll be able to make it")
                 return str(response)
             else:
-                response.message("Sorry we were unable to understand what you said. Please send Accept, Decline, or Maybe")
+                response.message("Sorry we were unable to understand what you said. Please send yes, no, or maybe")
                 return str(response)
         elif state == AttendeeState.INVITE_ACCEPTED:
             setAttendeeName(phone_number, body)
@@ -122,11 +123,14 @@ def parseVisibility(body):
         return 1
     else:
         return 100
-def sendInviteSMS(sender, inviteNumber):
+def sendInviteSMS(sender, inviteesNumber):
     senderName = getPersonName(sender)
     eventName = getOpenEventName(sender)
-
     message = "You have been invited by %s to %s. Can you come?\nReply Yes, No, Maybe" % (senderName, eventName)
+
+    for invitee in inviteesNumber:
+        sendSMS(invitee, message)
+    
 
 def sendSMS(number, message):
     client = Client(account_sid, auth_token)

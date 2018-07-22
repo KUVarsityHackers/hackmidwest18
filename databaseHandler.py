@@ -148,7 +148,7 @@ def getPersonName(phone_number):
     c = conn.cursor()
 
     c.execute('SELECT creatorName FROM events WHERE creator = ?'
-        ,[phone])
+        ,[phone_number])
     creatorNames = c.fetchone()
     if creatorNames is not None:
         for creatorName in creatorNames:
@@ -156,7 +156,7 @@ def getPersonName(phone_number):
                 closeConnection(conn)
                 return str(creatorName)
     c.execute('SELECT name FROM attendees WHERE phone = ?'
-            ,[phone])
+            ,[phone_number])
     attendeeNames = c.fetchall()
 
     if attendeeNames is not None:
