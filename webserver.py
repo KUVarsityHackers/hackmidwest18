@@ -161,7 +161,7 @@ def handle_request(request_data):
                     sendInvite(phone_number, invitee)
                 sendInviteSMS(phone_number, contacts_list)
                 response.message(
-                    "Send us the name or contact of someone else you'd like to invite, or type DONE")
+                    "Send us the phone number or contact of someone else you'd like to invite, or type DONE")
                 return str(response)
 
     else:
