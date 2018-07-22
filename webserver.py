@@ -72,7 +72,7 @@ def handle_request(request_data):
             else:
                 response.message("Sorry we were unable to understand what you said. Please send Accept, Decline, or Maybe")
                 return str(response)
-        else if state == AttendeeState.INVITE_ACCEPTED:
+        elif state == AttendeeState.INVITE_ACCEPTED:
             setAttendeeName(phone_number, body)
             response.message("Thank you we'll keep you updated")
             return str(response)
