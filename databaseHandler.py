@@ -29,7 +29,7 @@ def canAdd(phone,state):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT canAdd FROM attendees WHERE state = ? AND phone = ?'
+    c.execute('SELECT canAdd FROM attendees WHERE status = ? AND phone = ?'
         ,[int(state),phone])
     print(c.fetchone())
 
