@@ -179,10 +179,19 @@ def only_numerics(seq):
 def expired():
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     keytimes = getAlltimes()
-    print("KeyTimes:")
     for key, time, creator in keytimes:
        if(now > str(time)):
            setDone(creator)
+
+def remind_attendees():
+    now = datetime.datetime.now()
+    minus2fromnow = datetime.datetime.now().addHours(-2)
+    keytimes = getAlltimes()
+    for key, time, creator in keytimes:
+        if(minus2fromnow < str(time) and str(time) < now)
+            attendees = getAttendees(key)
+            for name, phone in attendees
+                sendSMS(phone, "Your event starts in under two hours")
 
 if __name__ == '__main__':
     if not os.path.isfile('database.db'):
