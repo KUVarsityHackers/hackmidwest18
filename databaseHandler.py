@@ -126,12 +126,13 @@ def setCreatorNameEvent(creator, name):
 def sendInvite(sender, invitee):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
-    eventID = 0
 
     try:
-        c.execute('SELECT eventID FROM attendees WHERE phone = ?'
-            ,[sender])
+        c.execute('SELECT eventID FROM attendees WHERE phone = ? AND NOT status = ?'
+            ,[sender, EventState.EVENT_DONE])
         eventID = c.fetchone()[0]
+
+        c.execute('UPDATE events SET status = ? WHERE key = ?', [EventState.ATTENDEES_ADDED, eventID])
 
         c.execute('INSERT INTO attendees (phone, eventID, status) VALUES (?, ?, ?)'
             ,[invitee, eventID, AttendeeState.INVITE_SENT])

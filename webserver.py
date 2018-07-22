@@ -63,7 +63,8 @@ def handle_request(request_data):
                     response.message("Thank you for planning {} with EventsEverywhere. We hope your event goes well.".format(eventName))
                     return str(response)
             NumMedia = request_data['NumMedia']
-            contacts_list = list()
+            contacts_list = []
+            body = only_numerics(body)
             for i in range(int(NumMedia)):
                 contacts_list.append(handle_vcf_url(request_data['MediaUrl' + str(i)]))
             if(len(body) == 10):
@@ -71,7 +72,8 @@ def handle_request(request_data):
             elif(len(body) == 11):
                 contacts_list.append("+" + str(body))
             elif len(contact_list) == 0:
-
+                response.message("Invalid number format")
+                return str(response)
             for invitee in contacts_list:
                 sendInvite(phone_number, invitee)
             response.message("Send us the name or contact of someone else you'd like to invite, or type DONE")
@@ -122,9 +124,9 @@ def parseVisibility(body):
         return 100
 def sendInviteSMS(sender, inviteNumber):
     senderName = getPersonName(sender)
-    eventName =
+    eventName = getOpenEventName(sender)
 
-    message = "You have been invited by %s to %s at %s. Can you come?\nReply Yes, No, Maybe" % (senderName, eventName, eventTime)
+    message = "You have been invited by %s to %s. Can you come?\nReply Yes, No, Maybe" % (senderName, eventName)
 
 def sendSMS(number, message):
     client = Client(account_sid, auth_token)
