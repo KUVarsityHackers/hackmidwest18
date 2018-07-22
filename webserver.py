@@ -181,12 +181,11 @@ def expired():
     for key, time in keytimes:
        print(key)
        print(time)
- 
+
 if __name__ == '__main__':
     if not os.path.isfile('database.db'):
         initializeDatabase()
-<<<<<<< HEAD
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=80)
 
 
 
@@ -195,7 +194,7 @@ if __name__ == '__main__':
 
 
 
-    
+
 =======
     app.run(host='0.0.0.0', port=80)
 >>>>>>> 3c5424d213b467049fcaa738a49ad4f07ba39124
