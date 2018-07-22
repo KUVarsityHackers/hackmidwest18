@@ -18,8 +18,10 @@ def initializeDatabase():
 def isOwner(phone,eventID):
     c.execute('SELECT isOwner FROM attendees WHERE eventID = ? AND phone = ?'
         ,[eventID,phone])
+    print("ISOWNER")
+    print(c.fetchone()[0])
     return c.fetchone()[0]
-    
+
 def createEvent(creator):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -137,10 +139,12 @@ def sendInvite(sender, invitee):
         eventID = c.fetchone()[0]
 
         c.execute('UPDATE events SET status = ? WHERE key = ?', [EventState.ATTENDEES_ADDED, eventID])
-
+        print("UPDATED")
         c.execute('SELECT visibility FROM events WHERE key = ?'
             ,[eventID])
         visibility = c.fetchone()[0]
+        print("VISIBILITY")
+        print(visibility)
         if visibility == 1:
             canADD = False
         elif visibility == 3 or visibility != 2:
