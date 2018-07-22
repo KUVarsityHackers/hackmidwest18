@@ -445,15 +445,17 @@ def getAttendees(key):
 def isFull(key):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
-
-    c.execute('SELECT status FROM attendees WHERE key = ?', [key])
+    print("Key %s" % key)
+    c.execute('SELECT status FROM attendees WHERE eventID = ?', [key])
     statuses = c.fetchall()
     c.execute('SELECT cap FROM events WHERE key = ?', [key])
     cap = c.fetchone()[0]
     closeConnection(conn)
     attending = 0
     for status in statuses:
-        if status == AttendeeState.INVITE_ACCEPTED or status == AttendeeState.ATTENDEE_NAMED or status == AttendeeState.DONE_PROVIDED:
+        if status[0] == AttendeeState.INVITE_ACCEPTED or status[0] == AttendeeState.ATTENDEE_NAMED or status[0] == AttendeeState.DONE_PROVIDED:
             attending = attending + 1
-
+    print(statuses)
+    print("attending:")
+    print(attending)
     return attending >= cap
