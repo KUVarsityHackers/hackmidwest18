@@ -376,7 +376,7 @@ def getAlltimes():
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT key, date FROM events')
+    c.execute('SELECT key, date, creator FROM events')
     keytimes = c.fetchall()
     closeConnection(conn)
     return keytimes
