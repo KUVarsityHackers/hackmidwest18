@@ -125,7 +125,7 @@ def handle_request(request_data):
                     response.message("Invalid number format")
                     return str(response)
                 for invitee in contacts_list:
-                    v(phone_number, invitee)
+                    sendInvite(phone_number, invitee)
                 sendInviteSMS(phone_number, contacts_list)
                 response.message("Send us the name or contact of someone else you'd like to invite, or type DONE")
                 return str(response)
