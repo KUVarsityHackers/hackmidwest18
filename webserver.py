@@ -196,6 +196,12 @@ def remind_attendees():
                 sendSMS(phone, "Your event starts in under two hours")
 
 def get_attendance(sender):
+    key = getKeyCreator(sender)
+    attendees = getAttendees(key)
+    myString = ""
+    for name, phone in attendees:
+        myString = myString + '/n' + str(name) 
+    sendSMS(sender, myString)   
     
 
 if __name__ == '__main__':
