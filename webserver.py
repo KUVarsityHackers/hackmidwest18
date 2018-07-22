@@ -25,7 +25,7 @@ def main():
 def handle_request(request_data):
     response = MessagingResponse()
     body = request_data['Body'].strip()
-    phone_number = request_data['From']
+    phone_number = only_numerics(request_data['From'])
 
     state = getState(phone_number)
     key = getKeyAttendee(phone_number)
