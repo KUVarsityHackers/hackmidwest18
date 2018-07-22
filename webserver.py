@@ -175,7 +175,27 @@ def only_numerics(seq):
     seq_type= type(seq)
     return seq_type().join(filter(seq_type.isdigit, seq))
 
+def expired():
+    keytimes = getAlltimes()
+    print("KeyTimes:")
+    for key, time in keytimes:
+       print(key)
+       print(time)
+ 
 if __name__ == '__main__':
     if not os.path.isfile('database.db'):
         initializeDatabase()
+<<<<<<< HEAD
+    app.run(host='0.0.0.0', port=5000)
+
+
+
+
+
+
+
+
+    
+=======
     app.run(host='0.0.0.0', port=80)
+>>>>>>> 3c5424d213b467049fcaa738a49ad4f07ba39124
