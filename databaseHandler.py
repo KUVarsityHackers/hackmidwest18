@@ -156,7 +156,8 @@ def sendInvite(sender, invitee):
             ,[str(invitee), int(eventID), int(AttendeeState.INVITE_SENT), False, canAdd])
         closeConnection(conn)
         return True
-    except:
+    except Exception as e:
+        print(e)
         print("Error sending invite")
         closeConnection(conn)
         return False
