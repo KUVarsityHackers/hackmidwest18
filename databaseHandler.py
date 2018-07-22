@@ -453,9 +453,9 @@ def isFull(key):
     closeConnection(conn)
     attending = 0
     for status in statuses:
-        if status == AttendeeState.INVITE_ACCEPTED or status == AttendeeState.ATTENDEE_NAMED or status == AttendeeState.DONE_PROVIDED:
+        if status[0] == AttendeeState.INVITE_ACCEPTED or status[0] == AttendeeState.ATTENDEE_NAMED or status[0] == AttendeeState.DONE_PROVIDED:
             attending = attending + 1
-        print(statuses)
+    print(statuses)
     print("attending:")
     print(attending)
     return attending >= cap
