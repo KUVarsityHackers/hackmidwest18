@@ -436,7 +436,7 @@ def getAttendees(key):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT name, phone FROM attendees WHERE key = ?', [key])
+    c.execute('SELECT name, phone FROM attendees WHERE eventID = ?', [key])
     Attendees = c.fetchall()
     closeConnection(conn)
     return Attendees
