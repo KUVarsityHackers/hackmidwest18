@@ -21,7 +21,8 @@ def isOwner(phone,eventID):
     return c.fetchone()[0]
 def canAdd(phone,state):
     c.execute('SELECT canAdd FROM attendees WHERE state = ? AND phone = ?'
-        ,[state,phone])f
+        ,[int(state),phone])
+    print(c.fetchone())
     return c.fetchone()[0]
 
 def createEvent(creator):
