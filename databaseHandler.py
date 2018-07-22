@@ -356,7 +356,7 @@ def setAttendeeDone(phone_number):
     c = conn.cursor()
 
     try:
-        c.execute('''UPDATE attendees SET status = ? WHERE phone = ? AND status = ?''', [AttendeeState.DONE_PROVIDED, phone_number, AttendeeState.ATTENDEE_NUMBERED])
+        c.execute('''UPDATE attendees SET status = ? WHERE phone = ? AND status = ?''', [AttendeeState.DONE_PROVIDED, phone_number, AttendeeState.ATTENDEE_NAMED])
         closeConnection(conn)
         return True
     except:

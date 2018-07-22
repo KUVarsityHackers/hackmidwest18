@@ -120,11 +120,6 @@ def handle_request(request_data):
                 if(len(body) == 10):
                     contacts_list.append("+1" + str(body))
                 elif(len(body) == 11):
-                    contacts_list.append("+" + str(body))
-                elif len(contacts_list) == 0:
-                    response.message("Invalid number format")
-                    return str(response)
-                for invitee in contacts_list:
                     sendInvite(phone_number, invitee)
                 sendInviteSMS(phone_number, contacts_list)
                 response.message("Send us the name or contact of someone else you'd like to invite, or type DONE")
