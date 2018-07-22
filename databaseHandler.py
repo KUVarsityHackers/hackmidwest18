@@ -11,7 +11,7 @@ def initializeDatabase():
     (key INTEGER PRIMARY KEY, title TEXT, date TEXT, cap INTEGER, visibility INTEGER, creator TEXT, creatorName TEXT, status INTEGER, details TEXT)''')
 
     c.execute('''CREATE TABLE attendees
-    (key INTEGER PRIMARY KEY, name TEXT, phone TEXT, eventID INTEGER, status TEXT)''')
+    (key INTEGER PRIMARY KEY, name TEXT, phone TEXT, eventID INTEGER, status INTEGER)''')
 
     closeConnection(conn)
 
@@ -258,7 +258,7 @@ def getState(phone):
         for createdEvent in createdEvents:
             if int(createdEvent) < int(EventState.EVENT_DONE):
                 closeConnection(conn)
-                return EventState(createdEvent)
+                return EventState(int(createdEvent))
     c.execute('SELECT status FROM attendees WHERE phone = ?'
             ,[phone])
     attendeeEvents = c.fetchone()
