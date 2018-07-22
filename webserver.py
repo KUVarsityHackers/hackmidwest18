@@ -16,7 +16,7 @@ scheduler = BackgroundScheduler()
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['POST'])
 def main():
     if request.method == 'POST':
         return handle_request(request.form)
@@ -39,7 +39,7 @@ def handle_request(request_data):
         elif state == EventState.NAME_CREATED:
             try:
                 date = parser.parse(body)
-                setDatetimeEvent(phone_number, parser.parse(date))
+                setDatetimeEvent(phone_number, date)
                 response.message(
                     'How would you describe your event? Remember to include the location')
                 return str(response)
@@ -70,7 +70,7 @@ def handle_request(request_data):
             return str(response)
         elif state == EventState.ORGANIZER_NAME_CREATED or state == EventState.ATTENDEES_ADDED:
             if state == EventState.ATTENDEES_ADDED:
-                if body == "DONE":
+                if body.lower() == "done":
                     event_name = getOpenEventName(key)
                     setDoneButListening(phone_number)
                     response.message(
@@ -137,7 +137,7 @@ def handle_request(request_data):
                     "Thank you using Events Everywhere. Please enjoy your event")
             return str(response)
         elif state == AttendeeState.ATTENDEE_NAMED:
-            if body == 'DONE':
+            if body.lower() == 'done':
                 setAttendeeDone(phone_number)
                 response.message(
                     "Thank you using Events Everywhere. Please enjoy your event")
