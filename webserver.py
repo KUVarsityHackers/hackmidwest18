@@ -20,7 +20,7 @@ def main():
 
 def handle_request(request_data):
     response = MessagingResponse()
-    body = request_data['Body']
+    body = request_data['Body'].strip()
     phone_number = request_data['From']
 
     state = getState(phone_number)
@@ -127,7 +127,11 @@ def parseVisibility(body):
 def sendInviteSMS(sender, inviteesNumber):
     senderName = getPersonName(sender)
     eventName = getOpenEventName(sender)
-    message = "You have been invited by %s to %s. Can you come?\nReply Yes, No, Maybe" % (senderName, eventName)
+    eventDescription = getEventDescription(sender)
+    eventTime = getEventTime(sender)
+    message = '''Message from Events Everywhere:\n
+    %s has invited you to %s: %s at %s
+    \n Can you come?\nReply Yes, No, Maybe''' % (senderName, eventName, eventDescription, eventTime)
 
     for invitee in inviteesNumber:
         sendSMS(invitee, message)

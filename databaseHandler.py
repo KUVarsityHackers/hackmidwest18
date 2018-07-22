@@ -147,8 +147,8 @@ def getPersonName(phone_number):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT creatorName FROM events WHERE creator = ?'
-        ,[phone_number])
+    c.execute('SELECT creatorName FROM events WHERE creator = ? AND NOT status = ?'
+        ,[phone_number, EventState.EVENT_DONE])
     creatorNames = c.fetchone()
     if creatorNames is not None:
         for creatorName in creatorNames:
@@ -164,6 +164,34 @@ def getPersonName(phone_number):
             if len(attendeeName) > 0:
                 closeConnection(conn)
                 return str(attendeeName)
+    return None
+
+def getEventDescription(phone_number):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    c.execute('SELECT details FROM events WHERE creator = ? AND NOT status = ?'
+        ,[phone_number, EventState.EVENT_DONE])
+    creatorNames = c.fetchone()
+    if creatorNames is not None:
+        for creatorName in creatorNames:
+            if len(creatorName) > 0:
+                closeConnection(conn)
+                return str(creatorName)
+    return None
+
+def getEventTime(phone_number):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    c.execute('SELECT date FROM events WHERE creator = ? AND NOT status = ?'
+        ,[phone_number, EventState.EVENT_DONE])
+    creatorNames = c.fetchone()
+    if creatorNames is not None:
+        for creatorName in creatorNames:
+            if len(creatorName) > 0:
+                closeConnection(conn)
+                return str(creatorName)
     return None
 
 def getOpenEventName(creator_phone_number):
