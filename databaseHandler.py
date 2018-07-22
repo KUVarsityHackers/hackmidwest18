@@ -179,20 +179,22 @@ def getKeyAttendee(phone_number):
 
     c.execute('SELECT eventID FROM attendees WHERE phone = ? AND (NOT status = ? OR NOT status = ? OR NOT status = ?)'
         ,[phone_number, AttendeeState.DONE_PROVIDED, AttendeeState.INVITE_DECLINED, AttendeeState.INVITE_MAYBE])
-    eventID = c.fetchone()[0]
+    eventID = c.fetchone()
     if eventID is None:
         c.execute('SELECT eventID FROM attendees WHERE phone = ? AND (NOT status = ? OR NOT status = ?)'
             ,[phone_number, AttendeeState.DONE_PROVIDED, AttendeeState.INVITE_DECLINED])
-        eventID = c.fetchone()[0]
+        eventID = c.fetchone()
     if eventID is None:
         c.execute('SELECT eventID FROM attendees WHERE phone = ? AND (NOT status = ?)'
             ,[phone_number, AttendeeState.INVITE_DECLINED])
-        eventID = c.fetchone()[0]
+        eventID = c.fetchone()
     if eventID is None:
         c.execute('SELECT eventID FROM attendees WHERE phone = ?'
             ,[phone_number])
-        eventID = c.fetchone()[0]
+        eventID = c.fetchone()
     closeConnection(conn)
+    if eventID is not None:
+        eventID = c.fetchone()[0]
     return eventID
 def getPersonName(phone_number):
     conn = sqlite3.connect(fileName)
