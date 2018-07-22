@@ -401,7 +401,7 @@ def getAttendees(key):
     closeConnection(conn)
     return Attendees
     
-def getKeyCreator(creator)
+def getKeyCreator(creator):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
