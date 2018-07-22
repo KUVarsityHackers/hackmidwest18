@@ -47,7 +47,7 @@ def handle_request(request_data):
             return str(response)
 
         elif state == EventState.CAPACITY_CREATED:
-            setVisibilityEvent(phone_number, parseVisibility(body))
+            setVisibilityEvent(phone_number, body)
             response.message("What's your name?")
             return str(response)
 
@@ -127,7 +127,7 @@ def handle_request(request_data):
                 return str(response)
 
     else:
-        if body == 'START':
+        if body.upper() == 'START':
             if createEvent(phone_number):
                 response.message("Welcome! Thank you for planning your event with Events Everywhere. Please provide a name for your event.")
                 return str(response)
