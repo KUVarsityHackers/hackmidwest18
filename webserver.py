@@ -114,7 +114,8 @@ def handle_request(request_data):
         if body == 'HELP':
             response.message("Help message")
             return str(response)
-    return("Unable to understand your message. Please try again or send HELP for help")
+    response.message("Unable to understand your message. Please try again or send HELP for help")
+    return(str(response))
 
 def parseVisibility(body):
     if body.lower() == 'private':
