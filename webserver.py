@@ -60,7 +60,7 @@ def handle_request(request_data):
                 if body == "DONE":
                     event_name = getOpenEventName(phone_number)
                     setDone(phone_number)
-                    response.message("Thank you for planning {} with EventsEverywhere. We hope your event goes well.".format(eventName))
+                    response.message("Thank you for planning {} with EventsEverywhere. We hope your event goes well.".format(event_name))
                     return str(response)
             NumMedia = request_data['NumMedia']
             contacts_list = []

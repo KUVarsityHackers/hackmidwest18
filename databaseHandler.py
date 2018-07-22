@@ -170,16 +170,13 @@ def getOpenEventName(creator_phone_number):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
-    c.execute('SELECT eventName FROM events WHERE creator = ? AND NOT status = ?'
-        ,[creator, EventState.DONE_PROVIDED])
+    c.execute('SELECT title FROM events WHERE creator = ? AND NOT status = ?'
+        ,[creator_phone_number, EventState.EVENT_DONE])
     createdEventName = c.fetchone()
     closeConnection(conn)
     if not (createdEventName is None):
-        return str(createdEventName)
+        return str(createdEventName[0])
     return None
-
-
-    return False
 
 def hadUnfinishedEvent(creator):
     conn = sqlite3.connect(fileName)
@@ -278,7 +275,7 @@ def closeConnection(conn):
     conn.commit()
     conn.close()
 
-def setDone(phone_number):
+def setDone(creator):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
