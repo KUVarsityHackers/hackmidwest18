@@ -9,6 +9,7 @@ class EventState(IntEnum):
     VISIBILITY_CREATED = auto()
     ORGANIZER_NAME_CREATED = auto()
     ATTENDEES_ADDED = auto()
+    EVENT_DONE_BUT_LISTENING = auto()
     EVENT_DONE = auto()
 
 class AttendeeState(IntEnum):
