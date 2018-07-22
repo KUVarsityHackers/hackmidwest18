@@ -363,3 +363,18 @@ def setAttendeeDone(phone_number):
         print("Failed to move user to done")
         closeConnection(conn)
         return False
+
+def remind_jobs()
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    c.execute('SELECT(key,date) FROM events')
+    return c.fetchall()
+        
+
+
+
+
+
+
+
