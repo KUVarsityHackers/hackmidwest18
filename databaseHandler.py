@@ -199,7 +199,7 @@ def getPersonName(phone_number):
                 return str(creatorName)
     c.execute('SELECT name FROM attendees WHERE phone = ?'
             ,[phone_number])
-    attendeeNames = c.fetchall()
+    attendeeNames = c.fetchone()
 
     if attendeeNames is not None:
         for attendeeName in attendeeNames:
