@@ -28,7 +28,7 @@ def handle_request(request_data):
     if type(state) is EventState:
         if state == EventState.EVENT_CREATED:
             setNameEvent(phone_number, body)
-            response.message('When would you like to have your event? (MM/DD/YY HH:MM a/pm)')
+            response.message('When would you like to have your event?\n(MM/DD/YY HH:MM (a/p)m)')
             return str(response)
 
         elif state == EventState.NAME_CREATED:
@@ -38,12 +38,12 @@ def handle_request(request_data):
 
         elif state == EventState.TIME_CREATED:
             setDescriptionEvent(phone_number, body)
-            response.message("How many people would you like to invite?")
+            response.message("What is the maximum number of attendees?")
             return str(response)
 
         elif state == EventState.DESCRIPTION_CREATED:
             setCapEvent(phone_number, int(body))
-            response.message("Would you like this event to be: \n1)Private \n2)Friends of Friends \n3)Public")
+            response.message("Would you like this event to be: \n1) Private \n2) Friends of Friends \n3) Public")
             return str(response)
 
         elif state == EventState.CAPACITY_CREATED:
@@ -60,7 +60,7 @@ def handle_request(request_data):
                 if body == "DONE":
                     event_name = getOpenEventName(phone_number)
                     setDone(phone_number)
-                    response.message("Thank you for planning {} with EventsEverywhere. We hope your event goes well.".format(event_name))
+                    response.message("Thank you for planning {} with Events Everywhere. We hope your event goes well.".format(event_name))
                     return str(response)
             NumMedia = request_data['NumMedia']
             contacts_list = []
@@ -114,7 +114,7 @@ def handle_request(request_data):
         if body == 'HELP':
             response.message("Help message")
             return str(response)
-    response.message("Unable to understand your message. Please try again or send HELP for help")
+    response.message("Unable to understand your message. Please try again.")
     return(str(response))
 
 def parseVisibility(body):
@@ -133,7 +133,7 @@ def sendInviteSMS(sender, inviteesNumber):
 
     for invitee in inviteesNumber:
         sendSMS(invitee, message)
-    
+
 
 def sendSMS(number, message):
     client = Client(account_sid, auth_token)

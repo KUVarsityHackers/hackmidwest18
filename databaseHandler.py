@@ -11,10 +11,15 @@ def initializeDatabase():
     (key INTEGER PRIMARY KEY, title TEXT, date TEXT, cap INTEGER, visibility INTEGER, creator TEXT, creatorName TEXT, status INTEGER, details TEXT)''')
 
     c.execute('''CREATE TABLE attendees
-    (key INTEGER PRIMARY KEY, name TEXT, phone TEXT, eventID INTEGER, status INTEGER)''')
+    (key INTEGER PRIMARY KEY, name TEXT, phone TEXT, eventID INTEGER, status INTEGER, isOwner BOOLEAN, canAdd)''')
 
     closeConnection(conn)
 
+def isOwner(phone,eventID):
+    c.execute('SELECT isOwner FROM attendees WHERE eventID = ? AND phone = ?'
+        ,[eventID,phone)
+    return c.fetchone()[0]
+    
 def createEvent(creator):
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -113,8 +118,7 @@ def setCreatorNameEvent(creator, name):
         c.execute('SELECT key FROM events WHERE creator = ? AND status = ?'
             ,[creator, EventState.ORGANIZER_NAME_CREATED])
         eventID = c.fetchone()[0]
-
-        c.execute('INSERT INTO attendees (name, phone, eventID, status) VALUES (?, ?, ?, ?)', [str(name), creator, int(eventID), int(AttendeeState.INVITE_ACCEPTED)])
+        c.execute('INSERT INTO attendees (name, phone, eventID, status, isOwner, canAdd) VALUES (?, ?, ?, ?, ?, ?)', [str(name), creator, int(eventID), int(AttendeeState.DONE_PROVIDED), True, True ])
         closeConnection(conn)
         return True
     except Exception as e:
@@ -134,8 +138,18 @@ def sendInvite(sender, invitee):
 
         c.execute('UPDATE events SET status = ? WHERE key = ?', [EventState.ATTENDEES_ADDED, eventID])
 
-        c.execute('INSERT INTO attendees (phone, eventID, status) VALUES (?, ?, ?)'
-            ,[invitee, eventID, AttendeeState.INVITE_SENT])
+        c.execute('SELECT visibility FROM events WHERE key = ?'
+            ,[eventID])
+        visibility = c.fetchone()[0]
+        if visibility == 1:
+            canADD = False
+        elif visibility == 3 or visibility != 2:
+            canAdd = True
+        else:
+            canAdd = isOwner(sender,eventID)
+
+        c.execute('INSERT INTO attendees (phone, eventID, status, isOwner, canAdd) VALUES (?, ?, ?, ?, ?)'
+            ,[invitee, eventID, AttendeeState.INVITE_SENT, False, canAdd])
         closeConnection(conn)
         return True
     except:
