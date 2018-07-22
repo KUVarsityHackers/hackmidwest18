@@ -31,7 +31,6 @@ def canAdd(phone,state):
 
     c.execute('SELECT canAdd FROM attendees WHERE status = ? AND phone = ?'
         ,[int(state),phone])
-    print(c.fetchone())
     canAdd = c.fetchone()[0]
     closeConnection(conn)
 
