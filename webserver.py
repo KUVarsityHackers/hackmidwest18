@@ -26,6 +26,10 @@ def handle_request(request_data):
     response = MessagingResponse()
     body = request_data['Body'].strip()
     phone_number = only_numerics(request_data['From'])
+    if(len(phone_number) == 10):
+        phone_number = "+1" + str(phone_number)
+    elif(len(phone_number) == 11):
+        phone_number = "+" + str(phone_number)
 
     state = getState(phone_number)
     key = getKeyAttendee(phone_number)
