@@ -151,7 +151,7 @@ def sendInvite(sender, invitee):
             canAdd = True
         else:
             canAdd = isOwner(sender,eventID)
-
+        print("ISOWNERWORKS")
         c.execute('INSERT INTO attendees (phone, eventID, status, isOwner, canAdd) VALUES (?, ?, ?, ?, ?)'
             ,[invitee, eventID, AttendeeState.INVITE_SENT, False, canAdd])
         closeConnection(conn)
