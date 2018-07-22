@@ -17,7 +17,7 @@ def initializeDatabase():
 
 def isOwner(phone,eventID):
     c.execute('SELECT isOwner FROM attendees WHERE eventID = ? AND phone = ?'
-        ,[eventID,phone)
+        ,[eventID,phone])
     return c.fetchone()[0]
     
 def createEvent(creator):
@@ -330,8 +330,6 @@ def setDone(creator):
         print("Error setting done for event")
         closeConnection(conn)
         return False
-<<<<<<< HEAD
-=======
 
 def setAttendeeDone(phone_number):
     conn = sqlite3.connect(fileName)
@@ -343,6 +341,5 @@ def setAttendeeDone(phone_number):
         return True
     except:
         print("Failed to move user to done")
-         closeConnection(conn)
-         return False
->>>>>>> ab7b5a454ce209692a5f29cc874dd889c2fd48dd
+        closeConnection(conn)
+        return False

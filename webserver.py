@@ -102,7 +102,7 @@ def handle_request(request_data):
             setAttendeeName(phone_number, body)
             response.message("If you'd like please send us the name or contact of someone else you'd like to invite, then type DONE")
             return str(response)
-        elif state = AttendeeState.ATTENDEE_NAMED:
+        elif state == AttendeeState.ATTENDEE_NAMED:
             if body == 'DONE':
                 setAttendeeDone(phone_number)
                 response.message("Thank you using Events Everywhere. Please enjoy your event")
