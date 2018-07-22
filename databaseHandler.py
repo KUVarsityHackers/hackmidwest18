@@ -139,9 +139,12 @@ def sendInvite(sender, invitee):
         eventID = c.fetchone()[0]
 
         c.execute('UPDATE events SET status = ? WHERE key = ?', [EventState.ATTENDEES_ADDED, eventID])
+        print("UPDATED")
         c.execute('SELECT visibility FROM events WHERE key = ?'
             ,[eventID])
         visibility = c.fetchone()[0]
+        print("VISIBILITY")
+        print(visibility)
         canAdd = False
         if visibility == 1:
             canADD = False
@@ -284,7 +287,7 @@ def setAttendeeName(phone, name):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE attendees set name = ? where phone = ?', [name, phone])
+        c.execute('UPDATE attendees set name = ?, status = ? where phone = ?', [name, int(AttendeeState.ATTENDEE_NAMED), phone])
         closeConnection(conn)
         return True
     except:
