@@ -18,8 +18,10 @@ def initializeDatabase():
 def isOwner(phone,eventID):
     c.execute('SELECT isOwner FROM attendees WHERE eventID = ? AND phone = ?'
         ,[eventID,phone])
-    print("ISOWNER")
-    print(c.fetchone()[0])
+    return c.fetchone()[0]
+def canAdd(phone,state):
+    c.execute('SELECT canAdd FROM attendees WHERE state = ? AND phone = ?'
+        ,[state,phone])f
     return c.fetchone()[0]
 
 def createEvent(creator):
@@ -293,7 +295,7 @@ def setAttendeeName(phone, name):
     except:
         print("Error adding attendee name")
         closeConnection(conn)
-        return false
+        return False
 
 def getState(phone):
     conn = sqlite3.connect(fileName)

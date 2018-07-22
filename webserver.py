@@ -29,7 +29,6 @@ def handle_request(request_data):
         if state == EventState.EVENT_CREATED:
             setNameEvent(phone_number, body)
             response.message('When would you like to have your event?\n(MM/DD/YY HH:MM (a/p)m)')
-            response.price = -1
             return str(response)
 
         elif state == EventState.NAME_CREATED:
@@ -101,7 +100,11 @@ def handle_request(request_data):
                 return str(response)
         elif state == AttendeeState.INVITE_ACCEPTED:
             setAttendeeName(phone_number, body)
-            response.message("If you'd like please send us the name or contact of someone else you'd like to invite, then type DONE")
+            if canAdd(AttendeeState.ATTENDEE_NAMED, phone_number):
+                response.message("If you'd like please send us the name or contact of someone else you'd like to invite, then type DONE")
+            else:
+                setAttendeeDone(phone_number)
+                response.message("Thank you using Events Everywhere. Please enjoy your event")
             return str(response)
         elif state == AttendeeState.ATTENDEE_NAMED:
             if body == 'DONE':
