@@ -139,12 +139,10 @@ def sendInvite(sender, invitee):
         eventID = c.fetchone()[0]
 
         c.execute('UPDATE events SET status = ? WHERE key = ?', [EventState.ATTENDEES_ADDED, eventID])
-        print("UPDATED")
         c.execute('SELECT visibility FROM events WHERE key = ?'
             ,[eventID])
         visibility = c.fetchone()[0]
-        print("VISIBILITY")
-        print(visibility)
+        canAdd = False
         if visibility == 1:
             canADD = False
         elif visibility == 3 or visibility != 2:
