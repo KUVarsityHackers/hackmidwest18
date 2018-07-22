@@ -24,7 +24,7 @@ def handle_request(request_data):
     phone_number = request_data['From']
 
     state = getState(phone_number)
-
+    key = getKeyAttendee(phone_number)
     if type(state) is EventState:
         if state == EventState.EVENT_CREATED:
             setNameEvent(phone_number, body)
@@ -58,7 +58,6 @@ def handle_request(request_data):
         elif state == EventState.ORGANIZER_NAME_CREATED or state == EventState.ATTENDEES_ADDED:
             if state == EventState.ATTENDEES_ADDED:
                 if body == "DONE":
-                    key = getKeyAttendee(phone_number)
                     event_name = getOpenEventName(key)
                     setDone(phone_number)
                     response.message("Thank you for planning {} with Events Everywhere. We hope your event goes well.".format(event_name))
@@ -85,8 +84,11 @@ def handle_request(request_data):
     elif type(state) is AttendeeState:
         if state == AttendeeState.INVITE_SENT or state == AttendeeState.INVITE_MAYBE:
             if body.lower() == 'yes':
-                inviteAccepted(phone_number)
-                response.message("Thank you for accepting. What's your name?")
+                if not isFull(key):
+                    inviteAccepted(phone_number)
+                    response.message("Thank you for accepting. What's your name?")
+                else:
+                    response.message("I'm sorry, the event is full. You will be notified if any openings occur.")
                 return str(response)
             elif body.lower() == 'no':
                 inviteDeclined(phone_number)

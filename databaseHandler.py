@@ -157,8 +157,6 @@ def sendInvite(sender, invitee):
         c.execute('SELECT visibility FROM events WHERE key = ?'
             ,[eventID])
         visibility = c.fetchone()[0]
-        print("VISIBILITY")
-        print(visibility)
         canAdd = False
         if visibility == 1:
             canADD = False
@@ -166,7 +164,6 @@ def sendInvite(sender, invitee):
             canAdd = True
         else:
             canAdd = isOwner(sender,eventID)
-        print("ISOWNERWORKS")
         c.execute('INSERT INTO attendees (phone, eventID, status, isOwner, canAdd) VALUES (?, ?, ?, ?, ?)'
             ,[str(invitee), int(eventID), int(AttendeeState.INVITE_SENT), False, canAdd])
         closeConnection(conn)
@@ -183,6 +180,18 @@ def getKeyAttendee(phone_number):
     c.execute('SELECT eventID FROM attendees WHERE phone = ? AND (NOT status = ? OR NOT status = ? OR NOT status = ?)'
         ,[phone_number, AttendeeState.DONE_PROVIDED, AttendeeState.INVITE_DECLINED, AttendeeState.INVITE_MAYBE])
     eventID = c.fetchone()[0]
+    if eventID is None:
+        c.execute('SELECT eventID FROM attendees WHERE phone = ? AND (NOT status = ? OR NOT status = ?)'
+            ,[phone_number, AttendeeState.DONE_PROVIDED, AttendeeState.INVITE_DECLINED])
+        eventID = c.fetchone()[0]
+    if eventID is None:
+        c.execute('SELECT eventID FROM attendees WHERE phone = ? AND (NOT status = ?)'
+            ,[phone_number, AttendeeState.INVITE_DECLINED])
+        eventID = c.fetchone()[0]
+    if eventID is None:
+        c.execute('SELECT eventID FROM attendees WHERE phone = ?'
+            ,[phone_number])
+        eventID = c.fetchone()[0]
     closeConnection(conn)
     return eventID
 def getPersonName(phone_number):
@@ -397,3 +406,22 @@ def remind_jobs():
 
     c.execute('SELECT(key,date) FROM events')
     return c.fetchall()
+
+def isFull(key):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    c.execute('SELECT status FROM attendees WHERE key = ?'
+        ,[key])
+    statuses = c.fetchall()
+    c.execute('SELECT cap FROM events WHERE key = ?'
+        ,[key])
+    cap = c.fetchone()
+    closeConnection(conn)
+    attending = 0
+    for status in statuses:
+        if status == AttendeeState.INVITE_ACCEPTED or status == AttendeeState.ATTENDEE_NAMED or status == AttendeeState.DONE_PROVIDED:
+            attending = attending + 1
+
+
+    return attending >= cap
