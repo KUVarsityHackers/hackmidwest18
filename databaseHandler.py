@@ -163,9 +163,11 @@ def inviteAccepted(invitee):
     try:
         c.execute('UPDATE attendees set status = ? WHERE phone = ?'
             ,[AttendeeState.INVITE_ACCEPTED, invitee])
+        closeConnection(conn)
         return True
     except:
         print("Error accepting invite")
+        closeConnection(conn)
         return False
 
 def inviteDeclined(invitee):
@@ -175,9 +177,11 @@ def inviteDeclined(invitee):
     try:
         c.execute('UPDATE attendees set status = ? WHERE phone = ?',
             [AttendeeState.INVITE_DECLINED, invitee])
+        closeConnection(conn)
         return True
     except:
         print("Error declining invite")
+        closeConnection(conn)
         return False
 
 def inviteMaybe(invitee):
@@ -187,10 +191,25 @@ def inviteMaybe(invitee):
     try:
         c.execute('UPDATE attendees set status = ? WHERE phone = ?',
             [AttendeeState.INVITE_MAYBE, invitee])
+        closeConnection(conn)
         return True
     except:
         print("Error responding with maybe")
+        closeConnection(conn)
         return False
+
+def setAttendeeName(phone, name):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    try:
+        c.execute('UPDATE attendees set name = ? where phone = ?', [name, phone])
+        closeConnection(conn)
+        return True
+    except:
+        print("Error adding attendee name")
+        closeConnection(conn)
+        return false
 
 def getState(phone):
     conn = sqlite3.connect(fileName)

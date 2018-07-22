@@ -56,7 +56,26 @@ def handle_request(request_data):
         # TODO: Logic for Adding attendees
 
     elif type(state) is AttendeeState:
-        return("Fuck")
+        if state == AttendeeState.INVITE_SENT or state == AttendeeState.INVITE_MAYBE:
+            if body.lower() == 'accept':
+                inviteAccepted(phone_number)
+                response.message("Thank you for accepting. What's your name?")
+                return str(response)
+            elif body.lower() == 'decline':
+                inviteDeclined(phone_number)
+                response.message("Sorry that you can't make it. Thank you for using Events Everywhere")
+                return str(response)
+            elif body.lower() == 'maybe':
+                inviteMaybe(phone_number)
+                response.message("Please response accept or decline when you know if you'll be able to make it")
+                return str(response)
+            else:
+                response.message("Sorry we were unable to understand what you said. Please send Accept, Decline, or Maybe")
+                return str(response)
+        else if state == AttendeeState.INVITE_ACCEPTED:
+            setAttendeeName(phone_number, body)
+            response.message("Thank you we'll keep you updated")
+            return str(response)
 
     else:
         if body == 'START':
