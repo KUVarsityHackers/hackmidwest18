@@ -372,7 +372,6 @@ def setAttendeeDone(phone_number):
         closeConnection(conn)
         return False
 
-<<<<<<< HEAD
 def getAlltimes():
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
@@ -381,19 +380,10 @@ def getAlltimes():
     keytimes = c.fetchall()
     closeConnection(conn)
     return keytimes
-        
 
-
-
-
-
-
-
-=======
 def remind_jobs():
     conn = sqlite3.connect(fileName)
     c = conn.cursor()
 
     c.execute('SELECT(key,date) FROM events')
     return c.fetchall()
->>>>>>> 3c5424d213b467049fcaa738a49ad4f07ba39124
