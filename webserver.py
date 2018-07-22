@@ -65,7 +65,7 @@ def handle_request(request_data):
             NumMedia = request_data['NumMedia']
             contacts_list = list()
             for i in range(int(NumMedia)):
-                contacts_list.append(handle_vcf_url(request_data['MediaUrl' + str(i)])):
+                contacts_list.append(handle_vcf_url(request_data['MediaUrl' + str(i)]))
             if(len(body) == 10):
                 contacts_list.append("+1" + str(body))
             elif(len(body) == 11):
