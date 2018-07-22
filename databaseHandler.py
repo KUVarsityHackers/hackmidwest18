@@ -245,7 +245,7 @@ def getOpenEventName(key):
     createdEventName = c.fetchone()
     closeConnection(conn)
     if not (createdEventName is None):
-        return str(createdEventName[0])
+        return createdEventName[0]
     return None
 
 def hadUnfinishedEvent(creator):
