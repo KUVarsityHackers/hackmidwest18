@@ -258,7 +258,7 @@ if __name__ == '__main__':
         initializeDatabase()
 
     scheduler.add_job(expired, 'interval', hours = 24)
-    scheduler.add_job(remind_attendees, 'interval', hours = 0.01)
+    scheduler.add_job(remind_attendees, 'interval', hours = 5)
     scheduler.start()
 
     app.run(host='0.0.0.0', port=5000)
