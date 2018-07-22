@@ -143,7 +143,7 @@ def handle_request(request_data):
 
 def sendInviteSMS(sender, inviteesNumber):
     key = getKeyAttendee(inviteesNumber[0])
-    senderName = getPersonName(key)
+    senderName = getPersonName(sender)
     eventName = getOpenEventName(key)
     eventDescription = getEventDescription(key)
     eventTime = getEventTime(key)
