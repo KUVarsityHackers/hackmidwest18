@@ -63,9 +63,13 @@ def handle_request(request_data):
             if createEvent(phone_number):
                 response.message("Welcome! Thank you for planning your event with Events Everywhere. Please provide a name for your event.")
                 return str(response)
-        else:
-            response.message("Please finish editing your other event first")
+            else:
+                response.message("Please finish editing your other event first")
+                return str(response)
+        if body == 'HELP':
+            response.message("Help message")
             return str(response)
+    return("Unable to understand your message. Please try again or send HELP for help")
 
 def parseVisibility(body):
     if body.lower() == 'private':
