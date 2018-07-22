@@ -100,8 +100,31 @@ def handle_request(request_data):
                 return str(response)
         elif state == AttendeeState.INVITE_ACCEPTED:
             setAttendeeName(phone_number, body)
-            response.message("Thank you we'll keep you updated")
+            response.message("If you'd like please send us the name or contact of someone else you'd like to invite, then type DONE")
             return str(response)
+        elif state = AttendeeState.ATTENDEE_NAMED:
+            if body == 'DONE':
+                setAttendeeDone(phone_number)
+                response.message("Thank you using Events Everywhere. Please enjoy your event")
+                return str(response)
+            else:
+                NumMedia = request_data['NumMedia']
+                contacts_list = []
+                body = only_numerics(body)
+                for i in range(int(NumMedia)):
+                    contacts_list.append(handle_vcf_url(request_data['MediaUrl' + str(i)]))
+                if(len(body) == 10):
+                    contacts_list.append("+1" + str(body))
+                elif(len(body) == 11):
+                    contacts_list.append("+" + str(body))
+                elif len(contacts_list) == 0:
+                    response.message("Invalid number format")
+                    return str(response)
+                for invitee in contacts_list:
+                    v(phone_number, invitee)
+                sendInviteSMS(phone_number, contacts_list)
+                response.message("Send us the name or contact of someone else you'd like to invite, or type DONE")
+                return str(response)
 
     else:
         if body == 'START':
@@ -117,13 +140,6 @@ def handle_request(request_data):
     response.message("Unable to understand your message. Please try again.")
     return(str(response))
 
-def parseVisibility(body):
-    if body.lower() == 'private':
-        return 0
-    elif body.lower() == 'friends of friends':
-        return 1
-    else:
-        return 100
 def sendInviteSMS(sender, inviteesNumber):
     senderName = getPersonName(sender)
     eventName = getOpenEventName(sender)

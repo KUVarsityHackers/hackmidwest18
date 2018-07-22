@@ -330,3 +330,19 @@ def setDone(creator):
         print("Error setting done for event")
         closeConnection(conn)
         return False
+<<<<<<< HEAD
+=======
+
+def setAttendeeDone(phone_number):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    try:
+        c.execute('''UPDATE attendees SET status = ? WHERE phone = ? AND status = ?''', [AttendeeState.DONE_PROVIDED, phone_number, AttendeeState.ATTENDEE_NUMBERED])
+        closeConnection(conn)
+        return True
+    except:
+        print("Failed to move user to done")
+         closeConnection(conn)
+         return False
+>>>>>>> ab7b5a454ce209692a5f29cc874dd889c2fd48dd
