@@ -267,7 +267,7 @@ def getState(phone):
         for attendeeEvent in attendeeEvents:
             if int(attendeeEvent) < int(AttendeeState.DONE_PROVIDED):
                 closeConnection(conn)
-                return EventState(attendeeEvent)
+                return AttendeeState(attendeeEvent)
     closeConnection(conn)
     return None
 
