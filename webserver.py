@@ -224,11 +224,12 @@ def expired():
 
 
 def remind_attendees():
+    print("Calling remind")
     now = datetime.datetime.now()
-    minus2fromnow = datetime.datetime.now().addHours(-2)
+    plus2fromnow = datetime.datetime.now() + datetime.timedelta(hours=2)
     keytimes = getAlltimes()
     for key, time, creator in keytimes:
-        if(minus2fromnow < str(time) and str(time) < now):
+        if(plus2fromnow > parser.parse(time) and parser.parse(time) < now):
             attendees = getAttendees(key)
             for name, phone in attendees:
                 sendSMS(phone, "Your event starts in under two hours")
@@ -250,7 +251,7 @@ if __name__ == '__main__':
         initializeDatabase()
 
     scheduler.add_job(expired, 'interval', hours = 24)
-    scheduler.add_job(remind_attendees, 'interval', hours = 1)
+    scheduler.add_job(remind_attendees, 'interval', hours = 0.001)
     scheduler.start()
 
     app.run(host='0.0.0.0', port=5000)

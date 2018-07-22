@@ -397,8 +397,8 @@ def setDoneButListening(creator):
     c = conn.cursor()
 
     try:
-        c.execute('UPDATE events SET status = ? WHERE creator = ? AND status = ?', [
-                  EventState.EVENT_DONE_BUT_LISTENING, creator, EventState.ATTENDEES_ADDED])
+        c.execute('UPDATE events SET status = ? WHERE creator = ? AND status = ?',
+        [EventState.EVENT_DONE_BUT_LISTENING, creator, EventState.ATTENDEES_ADDED])
         closeConnection(conn)
         return True
     except:
