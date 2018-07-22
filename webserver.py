@@ -58,7 +58,8 @@ def handle_request(request_data):
         elif state == EventState.ORGANIZER_NAME_CREATED or state == EventState.ATTENDEES_ADDED:
             if state == EventState.ATTENDEES_ADDED:
                 if body == "DONE":
-                    event_name = getOpenEventName(phone_number)
+                    key = getKeyAttendee(phone_number)
+                    event_name = getOpenEventName(key)
                     setDone(phone_number)
                     response.message("Thank you for planning {} with Events Everywhere. We hope your event goes well.".format(event_name))
                     return str(response)

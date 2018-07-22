@@ -182,7 +182,7 @@ def getKeyAttendee(phone_number):
 
     c.execute('SELECT eventID FROM attendees WHERE phone = ? AND (NOT status = ? OR NOT status = ? OR NOT status = ?)'
         ,[phone_number, AttendeeState.DONE_PROVIDED, AttendeeState.INVITE_DECLINED, AttendeeState.INVITE_MAYBE])
-    eventID = c.fetchone()
+    eventID = c.fetchone()[0]
     closeConnection(conn)
     return eventID
 def getPersonName(phone_number):
