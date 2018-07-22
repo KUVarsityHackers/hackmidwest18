@@ -261,11 +261,11 @@ def getState(phone):
                 return EventState(createdEvent)
     c.execute('SELECT status FROM attendees WHERE phone = ?'
             ,[phone])
-    attendeeEvents = c.fetchall()
+    attendeeEvents = c.fetchone()
 
     if attendeeEvents is not None:
         for attendeeEvent in attendeeEvents:
-            if int(attendeeEvent[0]) < int(AttendeeState.DONE_PROVIDED):
+            if int(attendeeEvent) < int(AttendeeState.DONE_PROVIDED):
                 closeConnection(conn)
                 return EventState(attendeeEvent)
     closeConnection(conn)
