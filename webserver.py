@@ -37,10 +37,15 @@ def handle_request(request_data):
             return str(response)
 
         elif state == EventState.NAME_CREATED:
-            setDatetimeEvent(phone_number, parser.parse(body))
-            response.message(
-                'How would you describe your event? Remember to include the location')
-            return str(response)
+            try:
+                date = parser.parse(body)
+                setDatetimeEvent(phone_number, parser.parse(date))
+                response.message(
+                    'How would you describe your event? Remember to include the location')
+                return str(response)
+            except:
+                response.message("Unable to understand: {}. Please try entering the date again".format(body))
+                return str(response)
 
         elif state == EventState.TIME_CREATED:
             setDescriptionEvent(phone_number, body)
