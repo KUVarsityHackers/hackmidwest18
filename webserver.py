@@ -28,32 +28,32 @@ def handle_request(request_data):
     if type(state) is EventState:
         if state == EventState.EVENT_CREATED:
             setNameEvent(phone_number, body)
-            response.message('Your event has been called "{}". When would you like to have your event?'.format(body))
+            response.message('When would you like to have your event? (MM/DD/YY) HH:MM a/pm')
             return str(response)
 
         elif state == EventState.NAME_CREATED:
             setDatetimeEvent(phone_number, parser.parse(body))
-            response.message('Your event has been schedule for {}. How would you describe your event?'.format(body))
+            response.message('How would you describe your event? Remember to include the location')
             return str(response)
 
         elif state == EventState.TIME_CREATED:
             setDescriptionEvent(phone_number, body)
-            response.message("Your event has the description: {}. How many people would you like to invite?".format(body))
+            response.message("How many people would you like to invite?")
             return str(response)
 
         elif state == EventState.DESCRIPTION_CREATED:
             setCapEvent(phone_number, int(body))
-            response.message("You have invited {} people. Would you like this event to be Private, Friends of Friends, or Public?".format(body))
+            response.message("Would you like this event to be: \n1)Private \n2)Friends of Friends \n3)Public?")
             return str(response)
 
         elif state == EventState.CAPACITY_CREATED:
             setVisibilityEvent(phone_number, parseVisibility(body))
-            response.message("Visibility set. What's your name?")
+            response.message("What's your name?")
             return str(response)
 
         elif state == EventState.VISIBILITY_CREATED:
             setCreatorNameEvent(phone_number, body)
-            response.message("Hello {}, who would you like to invite?".format(body))
+            response.message("Send us the phone number of or contact of someone you want to invite")
             return str(response)
         elif state == EventState.ORGANIZER_NAME_CREATED or state == EventState.ATTENDEES_ADDED:
             if state == EventState.ATTENDEES_ADDED:
@@ -79,16 +79,39 @@ def handle_request(request_data):
 
 
     elif type(state) is AttendeeState:
-        return("Fuck")
+        if state == AttendeeState.INVITE_SENT or state == AttendeeState.INVITE_MAYBE:
+            if body.lower() == 'accept':
+                inviteAccepted(phone_number)
+                response.message("Thank you for accepting. What's your name?")
+                return str(response)
+            elif body.lower() == 'decline':
+                inviteDeclined(phone_number)
+                response.message("Sorry that you can't make it. Thank you for using Events Everywhere")
+                return str(response)
+            elif body.lower() == 'maybe':
+                inviteMaybe(phone_number)
+                response.message("Please response accept or decline when you know if you'll be able to make it")
+                return str(response)
+            else:
+                response.message("Sorry we were unable to understand what you said. Please send Accept, Decline, or Maybe")
+                return str(response)
+        elif state == AttendeeState.INVITE_ACCEPTED:
+            setAttendeeName(phone_number, body)
+            response.message("Thank you we'll keep you updated")
+            return str(response)
 
     else:
         if body == 'START':
             if createEvent(phone_number):
-                response.message("What would you like to name your event?")
+                response.message("Welcome! Thank you for planning your event with Events Everywhere. Please provide a name for your event.")
                 return str(response)
-        else:
-            response.message("Please finish editing your other event first")
+            else:
+                response.message("Please finish editing your other event first")
+                return str(response)
+        if body == 'HELP':
+            response.message("Help message")
             return str(response)
+    return("Unable to understand your message. Please try again or send HELP for help")
 
 def parseVisibility(body):
     if body.lower() == 'private':
