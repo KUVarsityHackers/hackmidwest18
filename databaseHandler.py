@@ -384,11 +384,25 @@ def setDone(creator):
 
     try:
         c.execute('UPDATE events SET status = ? WHERE creator = ? AND status = ?', [
-                  EventState.EVENT_DONE, creator, EventState.ATTENDEES_ADDED])
+                  EventState.EVENT_DONE, creator, EventState.EVENT_DONE_BUT_LISTENING])
         closeConnection(conn)
         return True
     except:
         print("Error setting done for event")
+        closeConnection(conn)
+        return False
+
+def setDoneButListening(creator):
+    conn = sqlite3.connect(fileName)
+    c = conn.cursor()
+
+    try:
+        c.execute('UPDATE events SET status = ? WHERE creator = ? AND status = ?', [
+                  EventState.EVENT_DONE_BUT_LISTENING, creator, EventState.ATTENDEES_ADDED])
+        closeConnection(conn)
+        return True
+    except:
+        print("Error setting done but listening for event")
         closeConnection(conn)
         return False
 
@@ -426,22 +440,6 @@ def getAttendees(key):
     Attendees = c.fetchall()
     closeConnection(conn)
     return Attendees
-<<<<<<< HEAD
-    
-=======
-
-
->>>>>>> 0fc96b79a17222b583bd82fed1cf2fd9d62a0837
-def getKeyCreator(creator):
-    conn = sqlite3.connect(fileName)
-    c = conn.cursor()
-
-    c.execute('SELECT key FROM events WHERE status NOT = ? AND creatorName = ?', [
-              EventState.EVENT_DONE, creator])
-
-    keys = c.fetchall()
-    closeConnection(conn)
-    return keys
 
 
 def isFull(key):
