@@ -129,9 +129,7 @@ def sendInviteSMS(sender, inviteesNumber):
     eventName = getOpenEventName(sender)
     eventDescription = getEventDescription(sender)
     eventTime = getEventTime(sender)
-    message = '''Message from Events Everywhere:\n
-    %s has invited you to %s: %s at %s
-    \n Can you come?\nReply Yes, No, Maybe''' % (senderName, eventName, eventDescription, eventTime)
+    message = '''Message from Events Everywhere:\n%s has invited you to %s: %s at %s\n Can you come?\nReply Yes, No, Maybe''' % (senderName, eventName, eventDescription, eventTime)
 
     for invitee in inviteesNumber:
         sendSMS(invitee, message)
