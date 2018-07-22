@@ -71,7 +71,7 @@ def handle_request(request_data):
                 contacts_list.append("+1" + str(body))
             elif(len(body) == 11):
                 contacts_list.append("+" + str(body))
-            elif len(contact_list) == 0:
+            elif len(contacts_list) == 0:
                 response.message("Invalid number format")
                 return str(response)
             for invitee in contacts_list:
@@ -144,7 +144,7 @@ def sendSMS(number, message):
 def handle_vcf_url(url):
     r = requests.get(url)
     vcard = vobject.readOne(r.text)
-    tel = only_numerics(vcard.tel)
+    tel = only_numerics(str(vcard.tel))
     if(len(tel) == 10):
         return "+1" + str(tel)
     elif(len(tel) == 11):
