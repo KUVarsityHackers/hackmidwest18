@@ -194,7 +194,7 @@ def getKeyAttendee(phone_number):
         eventID = c.fetchone()
     closeConnection(conn)
     if eventID is not None:
-        eventID = c.fetchone()[0]
+        eventID = eventID[0]
     return eventID
 def getPersonName(phone_number):
     conn = sqlite3.connect(fileName)
@@ -400,7 +400,7 @@ def getAttendees(key):
     Attendees = c.fetchall()
     closeConnection(conn)
     return Attendees
-    
+
 
 def remind_jobs():
     conn = sqlite3.connect(fileName)
