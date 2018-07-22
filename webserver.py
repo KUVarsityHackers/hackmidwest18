@@ -142,10 +142,11 @@ def handle_request(request_data):
     return(str(response))
 
 def sendInviteSMS(sender, inviteesNumber):
-    senderName = getPersonName(sender)
-    eventName = getOpenEventName(sender)
-    eventDescription = getEventDescription(sender)
-    eventTime = getEventTime(sender)
+    key = getKeyAttendee(inviteesNumber[0])
+    senderName = getPersonName(key)
+    eventName = getOpenEventName(key)
+    eventDescription = getEventDescription(key)
+    eventTime = getEventTime(key)
     message = '''Message from Events Everywhere:\n%s has invited you to %s: %s at %s\n Can you come?\nReply Yes, No, Maybe''' % (senderName, eventName, eventDescription, eventTime)
 
     for invitee in inviteesNumber:
@@ -177,14 +178,4 @@ def only_numerics(seq):
 if __name__ == '__main__':
     if not os.path.isfile('database.db'):
         initializeDatabase()
-    app.run(host='0.0.0.0', port=5000)
-
-
-
-
-
-
-
-
-
-    
+    app.run(host='0.0.0.0', port=80)
