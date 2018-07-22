@@ -2,6 +2,8 @@ from __future__ import print_function
 import json
 from twilio.rest import Client
 
+account_sid = "AC81d02543e6fda0c44a977753c167e811"
+auth_token = "b3fdab5ec0024c7807e243237f8572a4"
 
 # --------------- Helpers that build all of the responses ----------------------
 
@@ -41,12 +43,13 @@ def handle_session_end_request():
 	return build_response({}, build_speechlet_response(speech_output, should_end_session))
 
 
-def player_name(intent, session):
+def test_text(intent, session):
     session_attributes = {}
-    number = intent['slots']['number']['value']
+    #number = intent['slots']['number']['value']
     reprompt_text = None
-    name = returnName(number)
-    speech_output = 'Number {} is {}'.format(number, name)
+    #name = returnName(number)
+    send_text()
+    speech_output = 'Text has been sent'
     should_end_session = True
     return build_response(session_attributes, build_speechlet_response(speech_output, should_end_session))
 
@@ -58,7 +61,7 @@ def on_intent(intent_request, session):
 	intent = intent_request['intent']
 	intent_name = intent_request['intent']['name']
 	if intent_name == "TestText":
-		return player_name(intent, session)
+		return test_text(intent, session)
 	elif intent_name == "AMAZON.HelpIntent":
 		return get_welcome_response()
 	elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
@@ -95,34 +98,10 @@ def lambda_handler(event, context):
 
 # --------------- Data Handler ------------------
 
-def returnName(number):
-    if number == "0":
-        return "Marcus Garrett"
-    elif number == "1":
-        return "Dedric Lawson"
-    elif number == "2":
-        return "Lagerald Vick"
-    elif number == "3":
-        return "Sam Cunliffe"
-    elif number == "4":
-        return "Devonte Graham"
-    elif number == "5":
-        return "Charlie Moore"
-    elif number == "10":
-        return "Sviatoslav Mykhailiuk"
-    elif number == "12":
-        return "Chris Teahan"
-    elif number == "13":
-        return "K.J. Lawson"
-    elif number == "14":
-        return "Malik Newman"
-    elif number == "21":
-        return "Clay Young"
-    elif number == "22":
-        return "Silvio De Sousa"
-    elif number == "35":
-        return "Udoka Azubuike"
-    elif number == "44":
-        return "Mitch Lightfoot"
-    elif number == "55":
-        return "James Sosinski"
+def send_text():
+    client = Client(account_sid, auth_token)
+    message = client.messages.create(
+                              body='Hello there!',
+                              from_='+12028038368',
+                              to='+19133279103'
+                          )
