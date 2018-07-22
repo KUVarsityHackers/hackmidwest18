@@ -15,7 +15,6 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
-    expired()
     if request.method == 'POST':
         return handle_request(request.form)
 
@@ -183,9 +182,9 @@ def expired():
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     keytimes = getAlltimes()
     print("KeyTimes:")
-    for key, time in keytimes:
-       print(key)
-       print(now > time)
+    for key, time, creator in keytimes:
+       if(now > str(time)):
+           setDone(creator)
 
 if __name__ == '__main__':
     if not os.path.isfile('database.db'):
