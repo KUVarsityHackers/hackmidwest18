@@ -453,5 +453,7 @@ def isFull(key):
     for status in statuses:
         if status == AttendeeState.INVITE_ACCEPTED or status == AttendeeState.ATTENDEE_NAMED or status == AttendeeState.DONE_PROVIDED:
             attending = attending + 1
-
+    print(statuses)
+    print("attending:")
+    print(attending)
     return attending >= cap
