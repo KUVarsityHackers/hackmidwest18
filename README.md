@@ -12,10 +12,10 @@ Begin planning an event by sending the keyword ```START EVENT``` to ```20280EVEN
 
 ## Developers
 
-Developed for [Hack Midwest 2018](http://hackmidwest.com) by:
-
 * [Colin Floyd](https://github.com/czfloyd)
 * [Grant Gollier](https://github.com/gragollier)
 * [Andre Kurait](https://github.com/AndreKurait)
-* [Nate Nichols](https://github.com/NateNichols55)
+* [Nate Nichols](https://github.com/NateNichols)
 * [Andrew Stratmann](https://github.com/adstratm)
+
+Developed for [Hack Midwest 2018](http://hackmidwest.com)
